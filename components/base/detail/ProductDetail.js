@@ -1,5 +1,4 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { unwrapResult } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
@@ -9,10 +8,7 @@ import StarRating from "react-native-star-rating";
 import { useDispatch, useSelector } from "react-redux";
 import Notifycation from "../../../commons/Notifycation";
 import { productApi } from "../../api/productApi";
-import {
-  addCartAction,
-  updateCartAction,
-} from "./../../../redux/actions/cartAction";
+import { addCartAction, updateCartAction } from "./../../../redux/actions/cartAction";
 import CarouselImage from "./Carousel";
 import ColorChoose from "./colorsAndSizes/ColorChoose";
 import SizeChoose from "./colorsAndSizes/SizeChoose";
@@ -20,12 +16,10 @@ import Review from "./comment/Review";
 import ProductDescription from "./ProductDescription";
 import Quantity from "./Quantity";
 const ProductDetail = ({ route }) => {
-  const sizes = route.params.item.sizes;
   const { _id } = route.params.item;
   const [currentProduct, setCurrentProduct] = useState();
   const navigation = useNavigation();
   const { user } = useSelector((state) => state.user);
-  const { isLoading } = useSelector((state) => state.cart);
   const [color, setColor] = useState();
   const [size, setSize] = useState();
   const [messages, setMessages] = useState([]);
@@ -40,17 +34,16 @@ const ProductDetail = ({ route }) => {
         console.log(err.message);
       });
   }, [_id]);
+
   const handleAddToCart = async () => {
     if (user) {
       const cartItem = listCart.find(
         (item) =>
-          item?.product?._id === currentProduct?._id &&
-          item.color === color &&
-          item?.size === size
+          item?.product?._id === currentProduct?._id && item.color === color && item?.size === size
       );
       if (cartItem) {
         try {
-          const res = await dispatch(
+          dispatch(
             updateCartAction({
               id: cartItem?._id,
               data: {
@@ -59,7 +52,6 @@ const ProductDetail = ({ route }) => {
               },
             })
           );
-          const result = unwrapResult(res);
           setMessages([
             ...messages,
             {
@@ -69,10 +61,11 @@ const ProductDetail = ({ route }) => {
             },
           ]);
         } catch (error) {
+          console.log(error);
           setMessages([
             ...messages,
             {
-              content: "Failed",
+              content: "Failed1",
               color: "red",
             },
           ]);
@@ -85,10 +78,10 @@ const ProductDetail = ({ route }) => {
             size,
             color,
             user_id: user._id,
+            // product: { ...currentProduct },
           };
           try {
-            const res = await dispatch(addCartAction(data));
-            const result = unwrapResult(res);
+            dispatch(addCartAction(data));
             setMessages([
               ...messages,
               {
@@ -101,7 +94,7 @@ const ProductDetail = ({ route }) => {
             setMessages([
               ...messages,
               {
-                content: "Failed",
+                content: "Failed2",
                 color: "red",
               },
             ]);
@@ -142,11 +135,7 @@ const ProductDetail = ({ route }) => {
   };
   return (
     <View style={styles.container}>
-      <Notifycation
-        messages={messages}
-        setMessages={setMessages}
-        style={{ zIndex: 1 }}
-      />
+      <Notifycation messages={messages} setMessages={setMessages} style={{ zIndex: 1 }} />
       <View style={styles.heading}>
         <TouchableOpacity
           onPress={() => {
@@ -157,24 +146,11 @@ const ProductDetail = ({ route }) => {
           <MaterialIcons name="arrow-back-ios" style={styles.goBackIcon} />
           <Text style={styles.productTitle}>{route.params.item.name}</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.searchBtn}
-          onPress={() => {
-            navigation.navigate("Search");
-          }}
-        >
-          <Ionicons name="search" size={22} color="#9098B1" />
-        </TouchableOpacity>
       </View>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{ paddingBottom: 300 }}
-      >
+      <ScrollView showsVerticalScrollIndicator={false} style={{ paddingBottom: 300 }}>
         <CarouselImage data={route.params.item.images} />
         <View style={styles.body} showsVerticalScrollIndicator={false}>
-          <Text style={styles.productDetailNameBody}>
-            {route.params.item.name}
-          </Text>
+          <Text style={styles.productDetailNameBody}>{route.params.item.name}</Text>
           <View style={styles.rating}>
             {currentProduct?.vote_average ? (
               <StarRating
@@ -191,9 +167,7 @@ const ProductDetail = ({ route }) => {
             )}
           </View>
           <View style={styles.price}>
-            <Text
-              style={styles.priceText}
-            >{`$${route.params.item.price}.00`}</Text>
+            <Text style={styles.priceText}>{`$${route.params.item.price}.00`}</Text>
           </View>
 
           <SizeChoose sizes={currentProduct?.sizes} setSize={setSize} />

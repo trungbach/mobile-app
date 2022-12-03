@@ -1,13 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Controller } from "react-hook-form";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 function InputForm({
@@ -20,27 +14,19 @@ function InputForm({
   name,
   errors,
   defaultValue,
-  type,
-  autofocus = false
+  autofocus = false,
 }) {
   const [borderColor, setBorderColor] = useState("#EBF0FF");
 
   return (
     <View>
-      <TouchableOpacity
-        style={[styles.wrapInput, { borderColor: borderColor }]}
-      >
-        <Icon
-          style={styles.icon}
-          name={iconname}
-          size={24}
-          color={borderColor}
-        />
+      <TouchableOpacity style={[styles.wrapInput, { borderColor: borderColor }]}>
+        <Icon style={styles.icon} name={iconname} size={24} color={borderColor} />
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-                autofocus={autofocus}
+              autofocus={autofocus}
               value={value}
               onFocus={() => setBorderColor("#40BFFF")}
               onBlur={() => setBorderColor("#EBF0FF")}
@@ -48,11 +34,10 @@ function InputForm({
               placeholder={placeholder}
               onChangeText={onChange}
               secureTextEntry={secureTextEntry}
-              defaultValue = {defaultValue}
+              defaultValue={defaultValue}
             />
           )}
           name={name}
-          
         />
 
         {secondIcon && (
@@ -66,9 +51,7 @@ function InputForm({
           />
         )}
       </TouchableOpacity>
-      {errors[name] && (
-        <Text style={styles.textErr}>{errors[name]?.message}</Text>
-      )}
+      {errors[name] && <Text style={styles.textErr}>{errors[name]?.message}</Text>}
     </View>
   );
 }

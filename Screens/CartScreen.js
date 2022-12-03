@@ -1,5 +1,5 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import React, { useMemo } from "react";
+import React from "react";
 import { StatusBar, StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import Cart from "../components/cart";
@@ -25,7 +25,6 @@ const CartScreen = () => {
         paddingBottom: 80,
         backgroundColor: "white",
         paddingTop: StatusBar.currentHeight,
-
         flex: 1,
       }}
     >

@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import ShipToScreen from "../../../screens/ShipToScreen";
 import Header from "../../base/Header";
 
-const Address = ({ navigation }) => {
+const Address = () => {
   return (
     <View style={styles.wrapper}>
       <Header header="Address" haveBack={true}></Header>
-
       <ShipToScreen />
     </View>
   );

@@ -1,18 +1,9 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigation } from "@react-navigation/native";
-import { unwrapResult } from "@reduxjs/toolkit";
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 import { useForm } from "react-hook-form";
-import {
-  Image,
-  KeyboardAvoidingView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { ALERT_TYPE, Root, Toast } from "react-native-alert-notification";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useDispatch } from "react-redux";
@@ -20,24 +11,19 @@ import * as yup from "yup";
 import InputForm from "../../commons/formHelper/InputForm";
 import SelectForm from "../../commons/formHelper/SelectForm";
 import { registerAction } from "../../redux/actions/userActions";
-import { userAction } from "../../redux/slice/userSlice";
 
 const ResgisterForm = ({ navigation }) => {
-  const [toggleVisibilityPassword, setToggleVisibilityPassword] =
-    useState(false);
+  const [toggleVisibilityPassword, setToggleVisibilityPassword] = useState(false);
   const [err, seterr] = useState();
 
   const dispatch = useDispatch();
-  const naviagtion = useNavigation();
   const phoneRegExp = /^0[0-9]{9}/;
   const schema = yup
     .object({
       fullName: yup.string().required(),
       address: yup.string().required().min(5),
       email: yup.string().required().email(),
-      phoneNumber: yup
-        .string()
-        .matches(phoneRegExp, "Phone number is not valid"),
+      phoneNumber: yup.string().matches(phoneRegExp, "Phone number is not valid"),
       password: yup.string().required().min(6),
       confirmPassword: yup
         .string()
@@ -51,16 +37,14 @@ const ResgisterForm = ({ navigation }) => {
     const dataSubmit = { ...data };
     delete dataSubmit.confirmPassword;
     try {
-      const user = await dispatch(registerAction(dataSubmit));
-      const result = unwrapResult(user);
-      // dispatch(userAction.setUser(result));
+      await dispatch(registerAction(dataSubmit));
       Toast.show({
         type: ALERT_TYPE.SUCCESS,
         title: "SUCCESS",
         textBody: "Successful Registration",
         autoClose: 2000,
       });
-      naviagtion.navigate("Login", {
+      navigation.navigate("Login", {
         email: data.email,
         password: data.password,
       });
@@ -135,9 +119,7 @@ const ResgisterForm = ({ navigation }) => {
             control={control}
             errors={errors}
             secureTextEntry={!toggleVisibilityPassword}
-            secondIcon={`${
-              toggleVisibilityPassword ? "visibility" : "visibility-off"
-            }`}
+            secondIcon={`${toggleVisibilityPassword ? "visibility" : "visibility-off"}`}
             setToggleVisibilityPassword={() =>
               setToggleVisibilityPassword(!toggleVisibilityPassword)
             }
@@ -150,9 +132,7 @@ const ResgisterForm = ({ navigation }) => {
             control={control}
             errors={errors}
             secureTextEntry={!toggleVisibilityPassword}
-            secondIcon={`${
-              toggleVisibilityPassword ? "visibility" : "visibility-off"
-            }`}
+            secondIcon={`${toggleVisibilityPassword ? "visibility" : "visibility-off"}`}
             setToggleVisibilityPassword={() =>
               setToggleVisibilityPassword(!toggleVisibilityPassword)
             }
@@ -171,10 +151,7 @@ const ResgisterForm = ({ navigation }) => {
             ]}
           />
 
-          <TouchableOpacity
-            onPress={handleSubmit(onSubmit)}
-            style={styles.signInButton}
-          >
+          <TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.signInButton}>
             <Text style={styles.signInButtonText}>Sign Up</Text>
           </TouchableOpacity>
         </KeyboardAvoidingView>

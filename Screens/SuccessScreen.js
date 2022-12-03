@@ -11,10 +11,7 @@ function SuccessScreen(props) {
       </View>
       <Text style={styles.texSuccess}>Success</Text>
       <Text style={styles.text}>Thank you</Text>
-      <TouchableOpacity
-        style={styles.buttonBack}
-        onPress={() => navigation.navigate("Home")}
-      >
+      <TouchableOpacity style={styles.buttonBack} onPress={() => navigation.navigate("Your Cart")}>
         <Text style={styles.textButtonBack}>Back To Order</Text>
       </TouchableOpacity>
     </View>

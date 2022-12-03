@@ -1,16 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  getUserbyIdAction,
-  loginAction,
-  registerAction,
-} from "../actions/userActions";
 const initialState = {
   isLoadingHome: false,
   homeData: [],
 };
 
 const homeSlice = createSlice({
-  name: "user",
+  name: "fetchHomeData",
   initialState: initialState,
   reducers: {
     fetchHomeData: (state, action) => {

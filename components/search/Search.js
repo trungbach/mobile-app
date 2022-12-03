@@ -1,10 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import {
-  useFocusEffect,
-  useIsFocused,
-  useNavigation,
-  useRoute,
-} from "@react-navigation/native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -14,6 +9,7 @@ import homeApi from "../api/homeApi";
 import Filter from "./Filter";
 import SearchModel from "./SearchModel";
 import Sort from "./Sort";
+
 const _ = require("lodash");
 
 const Search = () => {
@@ -33,7 +29,6 @@ const Search = () => {
   const [max, setMax] = useState(null);
   const textInputRef = useRef(null);
   const [isLoading, setLoading] = useState(true);
-  const isFocused = useIsFocused();
   useFocusEffect(
     React.useCallback(() => {
       if (route?.params) {
@@ -51,7 +46,6 @@ const Search = () => {
   /**
    * Xử lý khi input thay đổi
    * @param {*} param0
-   * @author: PVTRONG (17/4/2022)
    */
   const handleChange = ({ nativeEvent }) => {
     const { text } = nativeEvent;
@@ -61,39 +55,19 @@ const Search = () => {
 
   /**
    * reload lại khi dữ liệu bị thay đổi
-   * @author: PVTRONG (17/4/2022)
    */
   const reloadScreen = function () {
     handleSearch(keyword);
   };
 
   /**
-   * clean screen mỗi lần focus vào màn
-   */
-  const cleanScreen = function () {
-    setData([]);
-    setKeyword("");
-    setMax(null);
-    setMin(null);
-    setPreMax(null);
-    setPreMin(null);
-    setPreSortBy(SortEnum.TimeAsc);
-    setSortBy(SortEnum.TimeAsc);
-    setVisible(false);
-  };
-
-  /**
    * debounce search
-   * @author: PVTRONG (17/4/2022)
    */
-  const debounceSearch = useRef(
-    _.debounce((nextValue) => handleSearch(nextValue), 500)
-  ).current;
+  const debounceSearch = useRef(_.debounce((nextValue) => handleSearch(nextValue), 500)).current;
 
   /**
    * Gọi api search
    * @param {*} value keyword
-   * @author: PVTRONG (17/4/2022)
    */
   const handleSearch = async (value) => {
     try {
@@ -118,14 +92,6 @@ const Search = () => {
   /**
    * Xử lý focus input mỗi khi màn hình được focus
    */
-  // useEffect(() => {
-  //   if (clean) cleanScreen();
-  //   textInputRef.current.focus();
-  // }, [isFocused]);
-
-  /**
-   * Xử lý focus input mỗi khi màn hình được focus
-   */
   useEffect(() => {
     if (preSortBy != sortBy || min != preMin || preMax != max) {
       reloadScreen();
@@ -136,82 +102,79 @@ const Search = () => {
   }, [isShowSort, isShowFilter]);
 
   return (
-    <>
-      <View style={styles.searchPage}>
-        {isShowSort && (
-          <Sort
-            setIsShowSort={setIsShowSort}
-            setSortBy={setSortBy}
-            sortBy={sortBy}
-            isShowSort={isShowSort}
-          ></Sort>
-        )}
-        {isShowFilter && (
-          <Filter
-            min={min}
-            max={max}
-            setMin={setMin}
-            setMax={setMax}
-            setIsShowFilter={setIsShowFilter}
-          ></Filter>
-        )}
-        <View style={styles.searchBoxAndFilter}>
-          <View style={styles.searchBox}>
-            <View style={styles.searchIcon}>
-              <Ionicons name="search" size={16} color="#40BFFF" />
-            </View>
-            <TextInput
-              ref={textInputRef}
-              autoFocus={true}
-              value={keyword}
-              onChange={handleChange}
-              style={styles.inputSearch}
-              placeholder="Search Product"
-              clearButtonMode="always"
-            />
-            {keyword.length > 0 && (
-              <TouchableOpacity
-                onPress={() => {
-                  setKeyword("");
-                }}
-                style={styles.clear}
-              >
-                <Ionicons style={styles.clearBtn} name="close"></Ionicons>
-              </TouchableOpacity>
-            )}
+    <View style={styles.searchPage}>
+      {isShowSort && (
+        <Sort
+          setIsShowSort={setIsShowSort}
+          setSortBy={setSortBy}
+          sortBy={sortBy}
+          isShowSort={isShowSort}
+        ></Sort>
+      )}
+      {isShowFilter && (
+        <Filter
+          min={min}
+          max={max}
+          setMin={setMin}
+          setMax={setMax}
+          setIsShowFilter={setIsShowFilter}
+        ></Filter>
+      )}
+      <View style={styles.searchBoxAndFilter}>
+        <View style={styles.searchBox}>
+          <View style={styles.searchIcon}>
+            <Ionicons name="search" size={16} color="#40BFFF" />
           </View>
-          {visible && (
-            <Icon
+          <TextInput
+            ref={textInputRef}
+            autoFocus={true}
+            value={keyword}
+            onChange={handleChange}
+            style={styles.inputSearch}
+            placeholder="Search Product"
+            clearButtonMode="always"
+          />
+          {keyword.length > 0 && (
+            <TouchableOpacity
               onPress={() => {
-                navigation.navigate("Sort");
-                // setIsShowSort(true);
+                setKeyword("");
               }}
-              style={styles.sort}
-              name="sort-ascending"
-            ></Icon>
-          )}
-          {visible && (
-            <Icon
-              onPress={() => {
-                setIsShowFilter(true);
-              }}
-              style={styles.filter}
-              name="filter-outline"
-            ></Icon>
+              style={styles.clear}
+            >
+              <Ionicons style={styles.clearBtn} name="close"></Ionicons>
+            </TouchableOpacity>
           )}
         </View>
-        {!isLoading ? (
-          <SearchModel
-            reloadScreen={reloadScreen}
-            visible={visible}
-            data={data}
-            notFound={notFound}
-          ></SearchModel>
-        ) : (
-          <Loading />
+        {visible && (
+          <Icon
+            onPress={() => {
+              navigation.navigate("Sort");
+            }}
+            style={styles.sort}
+            name="sort-ascending"
+          ></Icon>
+        )}
+        {visible && (
+          <Icon
+            onPress={() => {
+              setIsShowFilter(true);
+            }}
+            style={styles.filter}
+            name="filter-outline"
+          ></Icon>
         )}
       </View>
-    </>
+      {!isLoading ? (
+        <SearchModel
+          reloadScreen={reloadScreen}
+          visible={visible}
+          data={data}
+          notFound={notFound}
+        ></SearchModel>
+      ) : (
+        <Loading />
+      )}
+    </View>
   );
 };
 

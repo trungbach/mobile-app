@@ -7,7 +7,7 @@ export const cartApi = {
   },
   deleteCart: (id) => {
     const url = `/cart/${id}`;
-    return axiosClient.delete(url);P
+    return axiosClient.delete(url);
   },
   updateCart: (id, data) => {
     const url = `/cart/${id}`;

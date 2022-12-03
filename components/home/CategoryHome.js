@@ -37,10 +37,7 @@ const CategoryHome = ({ navigation, types }) => {
             }}
           >
             <View>
-              <Image
-                style={{ height: 44, width: 44 }}
-                source={categoryUrl.url}
-              />
+              <Image style={{ height: 44, width: 44 }} source={categoryUrl.url} />
             </View>
             <Text style={styles.categoryText}>{categoryUrl.name}</Text>
           </TouchableOpacity>
@@ -54,7 +51,6 @@ export default CategoryHome;
 
 const styles = StyleSheet.create({
   category: {
-    // flex: 1,
     marginVertical: 8,
   },
   heading: {

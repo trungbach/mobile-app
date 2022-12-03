@@ -1,36 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import Header from "../../base/Header";
-import { useIsFocused } from "@react-navigation/native";
-import { Convert } from "../../../utils/Convert";
-import { GenderConstant } from "../../../commons/constants/gender.constant";
-import { userAction } from "../../../redux/slice/userSlice";
-import { useSelector, useDispatch } from "react-redux";
-import { updateUserAction } from "../../../redux/actions/userActions";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { Picker } from "@react-native-picker/picker";
+import { unwrapResult } from "@reduxjs/toolkit";
+import React, { useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useDispatch, useSelector } from "react-redux";
+import { GenderConstant } from "../../../commons/constants/gender.constant";
+import { updateUserAction } from "../../../redux/actions/userActions";
+import Header from "../../base/Header";
 
-const Gender = ({ navigation, route }) => {
+const Gender = ({ navigation }) => {
   const user = useSelector((state) => state.user.user);
-  console.log(user);
   const [selectedValue, setSelectedValue] = useState(0);
-  const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  const getIndex = { Nam: 0, Nu: 1, Khac: 2 };
-  // const save = async () => {
-  //   const userNew = await dispatch(
-  //     updateUserAction({
-  //       id: user._id,
-  //       data: { gender: selectedValue },
-  //     })
-  //   );
-  //   const result = unwrapResult(userNew);
-  //   dispatch(userAction.setUser(result));
-  //   navigation.goBack();
-  // };
 
-  const save = async (data) => {
+  const save = async () => {
     try {
       const response = await dispatch(
         updateUserAction({
@@ -44,13 +27,6 @@ const Gender = ({ navigation, route }) => {
       console.log(err);
     }
   };
-  /**
-   * Xử lý focus input mỗi khi màn hình được focus
-   */
-  // useEffect(() => {
-  //   // TODO fullName truyền từ profile động
-  //   setSelectedValue(route?.params?.value);
-  // }, [isFocused]);
 
   return (
     <View style={styles.wrapper}>
@@ -60,7 +36,7 @@ const Gender = ({ navigation, route }) => {
         <Picker
           style={styles.picker}
           selectedValue={selectedValue}
-          onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+          onValueChange={(itemValue) => setSelectedValue(itemValue)}
         >
           {GenderConstant.map((item, index) => (
             <Picker.Item label={item.label} value={item.value} key={index} />
@@ -68,11 +44,7 @@ const Gender = ({ navigation, route }) => {
         </Picker>
       </View>
 
-      <TouchableOpacity
-        style={styles.button}
-        activeOpacity={0.5}
-        onPress={save}
-      >
+      <TouchableOpacity style={styles.button} activeOpacity={0.5} onPress={save}>
         <Text style={styles.textButton}>Save</Text>
       </TouchableOpacity>
     </View>

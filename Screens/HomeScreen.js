@@ -1,10 +1,7 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
 import React from "react";
 import Home from "../components/home/Home";
 
-const HomeScreen = ({ navigation }) => {
-  return <Home navigation={navigation} />;
+const HomeScreen = ({ navigation, route }) => {
+  return <Home navigation={navigation} route={route} />;
 };
 export default HomeScreen;
-
-const styles = StyleSheet.create({});

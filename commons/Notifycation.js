@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
-import { Animated, Button, Text, View } from "react-native";
+import { Animated, Text, View } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 const Message = (props) => {
@@ -53,12 +53,7 @@ const Message = (props) => {
       }}
     >
       <View style={{ alignItems: "center", flexDirection: "row" }}>
-        <Icon
-          name={props.message.icon}
-          size={20}
-          color="white"
-          style={{ marginRight: 10 }}
-        />
+        <Icon name={props.message.icon} size={20} color="white" style={{ marginRight: 10 }} />
         <Text style={{ color: "white" }}>{props.message.content}</Text>
       </View>
     </Animated.View>

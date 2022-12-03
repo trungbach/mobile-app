@@ -1,9 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  getUserbyIdAction,
-  loginAction,
-  registerAction,
-} from "../actions/userActions";
+import { getUserbyIdAction } from "../actions/userActions";
 const initialState = {
   user: null,
   isLoading: false,
@@ -21,7 +17,6 @@ const userSlice = createSlice({
   extraReducers: (builder) =>
     builder
       .addCase(getUserbyIdAction.pending, (state) => {
-        console.log("pending");
         state.isLoading = true;
       })
       .addCase(getUserbyIdAction.fulfilled, (state, action) => {
@@ -29,7 +24,6 @@ const userSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(getUserbyIdAction.rejected, (state, action) => {
-        console.log("failed");
         state.error = action.payload;
         state.isLoading = false;
       }),

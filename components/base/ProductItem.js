@@ -1,13 +1,6 @@
-import React, { useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  Alert,
-} from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import StarRating from "react-native-star-rating";
 
 /**
@@ -15,7 +8,7 @@ import StarRating from "react-native-star-rating";
  * @param {*} param0
  * @returns
  */
-export default function ProductItem({ item, type = "Puma" }) {
+export default function ProductItem({ item }) {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
@@ -38,10 +31,7 @@ export default function ProductItem({ item, type = "Puma" }) {
         </View>
         <View style={styles.itemDisc}>
           <View>
-            <Text
-              style={styles.itemName}
-              numberOfLines={1}
-            >{`${item.name}`}</Text>
+            <Text style={styles.itemName} numberOfLines={1}>{`${item.name}`}</Text>
           </View>
           <View style={styles.rating}>
             {item?.vote_average ? (
@@ -59,9 +49,7 @@ export default function ProductItem({ item, type = "Puma" }) {
             )}
           </View>
           <View>
-            <Text style={styles.itemPrice}>{`$${Math.round(
-              (item.price * 10) / 10
-            )}.00`}</Text>
+            <Text style={styles.itemPrice}>{`$${Math.round((item.price * 10) / 10)}.00`}</Text>
           </View>
           <View style={styles.saleBox}>
             <Text style={styles.itemOldPrice}>{`$${

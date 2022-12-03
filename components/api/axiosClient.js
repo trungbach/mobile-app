@@ -21,7 +21,6 @@ axiosClient.interceptors.response.use(
     if (response && response.data) {
       return response.data;
     }
-    
     return response;
   },
   (error) => {
@@ -31,16 +30,10 @@ axiosClient.interceptors.response.use(
 );
 axiosClient.interceptors.request.use(async (config) => {
   const customHeaders = {};
-
   const token = await SecureStore.getItemAsync("token");
-  
-
-
-
   if (token) {
-    customHeaders.Authorization = token;
+    customHeaders.Authorization = `Bearer ${token}`;
   }
-
   return {
     ...config,
     headers: {

@@ -1,52 +1,34 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserAction } from "../../../redux/actions/userActions";
 import Header from "../../base/Header";
 import CustomInput from "../../login/CustomInput";
-import { useIsFocused } from "@react-navigation/native";
-import { useForm, Controller } from "react-hook-form";
-import { Convert } from "../../../utils/Convert";
-import { useSelector, useDispatch } from "react-redux";
-import { userAction } from "../../../redux/slice/userSlice";
-import { updateUserAction } from "../../../redux/actions/userActions";
-import { unwrapResult } from "@reduxjs/toolkit";
 
-const Name = ({ navigation, route }) => {
+const Name = ({ navigation }) => {
   const user = useSelector((state) => state.user.user);
-  // console.log(user);
-  const [index, setIndex] = useState(0);
-  //   const [fullNameNew, setFullNameNew] = useState();
   const [indexInput, setIndexInput] = useState(10);
-  const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({ defaultValues: { name: user.fullName } });
-  // console.log(user.user.fullName);
   const save = async (data) => {
     try {
-      const response = await dispatch(
+      dispatch(
         updateUserAction({
           id: user._id,
           data: { fullName: data.name },
         })
       );
-      const userNew = unwrapResult(response);
       navigation.goBack();
     } catch (err) {
       console.log(err);
     }
   };
-
-  /**
-   * Xử lý focus input mỗi khi màn hình được focus
-   */
-  //   useEffect(() => {
-  //     // TODO fullName truyền từ profile động
-  //     setFullNameNew(route?.params?.fullName);
-  //   }, [isFocused]);
 
   return (
     <View style={styles.wrapper}>
@@ -62,11 +44,7 @@ const Name = ({ navigation, route }) => {
         control={control}
         name="name"
       ></CustomInput>
-      <TouchableOpacity
-        style={styles.button}
-        activeOpacity={0.5}
-        onPress={handleSubmit(save)}
-      >
+      <TouchableOpacity style={styles.button} activeOpacity={0.5} onPress={handleSubmit(save)}>
         <Text style={styles.textButton}>Save</Text>
       </TouchableOpacity>
     </View>

@@ -1,37 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { unwrapResult } from "@reduxjs/toolkit";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserAction } from "../../../redux/actions/userActions";
 import Header from "../../base/Header";
 import CustomInput from "../../login/CustomInput";
-import { useIsFocused } from "@react-navigation/native";
-import { useForm, Controller } from "react-hook-form";
-import { Convert } from "../../../utils/Convert";
-import { useSelector, useDispatch } from "react-redux";
-import { userAction } from "../../../redux/slice/userSlice";
-import { updateUserAction } from "../../../redux/actions/userActions";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { ALERT_TYPE, Root, Toast } from "react-native-alert-notification";
-import Icon from "react-native-vector-icons/FontAwesome";
 
-const ChangePassword = ({ navigation, route }) => {
+const ChangePassword = ({ navigation }) => {
   const user = useSelector((state) => state.user.user);
   const [index, setIndex] = useState(1);
-  //   const [newPassword, setNewPassword] = useState("");
-  //   const [oldPassword, setOldPassword] = useState("");
-  //   const [confirmPassword, setConfirmPassword] = useState("");
   const [indexInput, setIndexInput] = useState(10);
   const [err, seterr] = useState();
-  const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  console.log(user.password);
   const save = async (data) => {
     try {
-      if (data.oldPassword === user.password) {
+      if (data.oldPassword !== user.password) {
+        seterr("Old password is not correct");
+      } else if (data.newPassword !== data.confirmPassword) {
+        seterr("Confirm new password not match");
+      } else {
         const response = await dispatch(
           updateUserAction({
             id: user._id,
@@ -39,28 +34,17 @@ const ChangePassword = ({ navigation, route }) => {
           })
         );
         const userNew = unwrapResult(response);
+        console.log("userNew", userNew);
         navigation.goBack();
-      } else {
-        seterr("Old password is not correct");
       }
     } catch (err) {
       console.log(err);
     }
   };
-  /**
-   * Xử lý focus input mỗi khi màn hình được focus
-   */
-  //   useEffect(() => {
-  //     // TODO password truyền từ profile động
-  //     setNewPassword("");
-  //   }, [isFocused]);
+
   return (
     <View style={styles.wrapper}>
-      <Header
-        style={styles.header}
-        header="ChangePassword"
-        haveBack={true}
-      ></Header>
+      <Header style={styles.header} header="ChangePassword" haveBack={true}></Header>
       {err && (
         <View style={styles.boxErr}>
           <Icon style={styles.icon} name="warning" size={20} color="red" />
@@ -73,8 +57,6 @@ const ChangePassword = ({ navigation, route }) => {
         index={index}
         setIndexInput={setIndexInput}
         isActive={indexInput === index}
-        // value={oldPassword}
-        // setValue={setOldPassword}
         placeholder={"Old password"}
         autoFocus={true}
         control={control}
@@ -85,7 +67,6 @@ const ChangePassword = ({ navigation, route }) => {
             message: "Old password should be minimum 6 characters long",
           },
         }}
-        // control={control}
         name="oldPassword"
         iconName="lock-outline"
         isHaveVisibility={true}
@@ -95,8 +76,6 @@ const ChangePassword = ({ navigation, route }) => {
         index={index}
         setIndexInput={setIndexInput}
         isActive={indexInput === index}
-        // value={newPassword}
-        // setValue={setNewPassword}
         placeholder={"New password"}
         rule={{
           required: "New password is required",
@@ -113,10 +92,6 @@ const ChangePassword = ({ navigation, route }) => {
       <Text style={styles.label}>New Password Again</Text>
       <CustomInput
         rule={{
-          //   validate: (value) => {
-          //     console.log("value=", value, " ", "new=", newPassword);
-          //     return value === newPassword || "The passwords do not match";
-          //   },
           required: "New password again is required",
           minLength: {
             value: 6,
@@ -126,19 +101,13 @@ const ChangePassword = ({ navigation, route }) => {
         index={index}
         setIndexInput={setIndexInput}
         isActive={indexInput === index}
-        // value={confirmPassword}
-        // setValue={setConfirmPassword}
         placeholder={"New password again"}
         control={control}
         name="confirmPassword"
         iconName="lock-outline"
         isHaveVisibility={true}
       ></CustomInput>
-      <TouchableOpacity
-        style={styles.button}
-        activeOpacity={0.5}
-        onPress={handleSubmit(save)}
-      >
+      <TouchableOpacity style={styles.button} activeOpacity={0.5} onPress={handleSubmit(save)}>
         <Text style={styles.textButton}>Save</Text>
       </TouchableOpacity>
     </View>

@@ -5,15 +5,10 @@ export const getListShippingAction = createAsyncThunk(
   "fetchListShipping",
   async (userId, { rejectWithValue }) => {
     try {
-      console.log(userId)
-      const listShipping = await shippingInfoApi.getListShippingInfoByUserid(
-        userId
-      );
-      console.log( "cccc")
-      console.log( listShipping.length)
+      const listShipping = await shippingInfoApi.getListShippingInfoByUserid(userId);
       return listShipping;
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
       return rejectWithValue("Failed");
     }
   }
@@ -21,7 +16,6 @@ export const getListShippingAction = createAsyncThunk(
 export const deleteShippingAction = createAsyncThunk(
   "deleteShipping",
   async (id, { rejectWithValue }) => {
-    
     try {
       const deletedShipping = await shippingInfoApi.deleteShippingInfo(id);
       return id;
@@ -34,10 +28,7 @@ export const updateShippingAction = createAsyncThunk(
   "updateShipping",
   async ({ id, data }, { rejectWithValue }) => {
     try {
-      const updatedShipping = await shippingInfoApi.updateShippingInfo(
-        id,
-        data
-      );
+      const updatedShipping = await shippingInfoApi.updateShippingInfo(id, data);
       return updatedShipping;
     } catch (error) {
       return rejectWithValue("Failed");
@@ -48,15 +39,11 @@ export const addShippingAction = createAsyncThunk(
   "addShipping",
   async (data, { rejectWithValue }) => {
     try {
-      const updatedShipping = await shippingInfoApi.addShippingInfo(
-        data
-      );
+      const updatedShipping = await shippingInfoApi.addShippingInfo(data);
       return updatedShipping;
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
       return rejectWithValue("Failed");
     }
   }
 );
-
-

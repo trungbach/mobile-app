@@ -1,77 +1,94 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useCallback } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import {
+  FlatList,
+  Pressable,
   StyleSheet,
   Text,
-  View,
   TextInput,
-  FlatList,
   TouchableOpacity,
+  View,
 } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import React, { useState, useEffect } from "react";
-import CategoryHome from "./CategoryHome";
-import homeApi from "./../api/homeApi";
-import ProductList from "./../base/ProductList";
-import SplashScreen from "../../screens/SplashScreen";
 import { useSelector } from "react-redux";
+import Notifycation from "../../commons/Notifycation";
+import ProductList from "./../base/ProductList";
+import CategoryHome from "./CategoryHome";
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation, route }) => {
   const { homeData } = useSelector((state) => state.home);
+  const [messages, setMessages] = useState([]);
+  useEffect(() => {
+    if (route?.params?.paymentSuccess) {
+      setMessages([
+        ...messages,
+        {
+          content: "Payment Success",
+          color: "green",
+          icon: "check-circle",
+        },
+      ]);
+    }
+  }, [route]);
+
   const categoryProducts = homeData.map((item) => ({
     _id: item._id,
     name: item.name,
   }));
+
   return (
-    <>
-      <View style={styles.homePage}>
-        <View style={styles.homeSearch}>
-          <View style={styles.searchIcon}>
-            <Ionicons name="search" size={16} color="#40BFFF" />
-          </View>
-          <TextInput
-            placeholder="Search Product"
-            onFocus={() => {
-              navigation.navigate("search", { clean: true });
-            }}
-          />
-        </View>
-        <View style={styles.category}>
-          <CategoryHome navigation={navigation} types={categoryProducts} />
-        </View>
+    <View style={styles.homePage}>
+      <Notifycation messages={messages} setMessages={setMessages} style={{ zIndex: 1 }} />
 
-        <FlatList
-          // style={{ marginBottom: 250 }}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item._id}
-          data={homeData}
-          renderItem={({ item }) => (
-            <View>
-              <View style={styles.productHeading}>
-                <Text style={styles.productName}>{item.name}</Text>
-
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("TypeFullProduct", {
-                      type: item.name,
-                      data: categoryProducts,
-                    });
-                  }}
-                >
-                  <Text style={styles.productSeeMore}>See More</Text>
-                </TouchableOpacity>
-              </View>
-              <ProductList
-                navigation={navigation}
-                data={item.data}
-                horizontal={true}
-                btnSeeMore={true}
-                id={item?._id}
-                type={item.name}
-              />
-            </View>
-          )}
-        />
+      <Pressable
+        style={styles.homeSearch}
+        onPress={() => {
+          navigation.navigate("Search", { clean: true });
+        }}
+      >
+        <View style={styles.searchIcon}>
+          <Ionicons name="search" size={16} color="#40BFFF" />
+        </View>
+        <TextInput placeholder="Search Product" />
+      </Pressable>
+      <View style={styles.category}>
+        <CategoryHome navigation={navigation} types={categoryProducts} />
       </View>
-    </>
+
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => item._id}
+        data={homeData}
+        renderItem={({ item }) => (
+          <View>
+            <View style={styles.productHeading}>
+              <Text style={styles.productName}>{item.name}</Text>
+
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("TypeFullProduct", {
+                    type: item.name,
+                    data: categoryProducts,
+                  });
+                }}
+              >
+                <Text style={styles.productSeeMore}>See More</Text>
+              </TouchableOpacity>
+            </View>
+            <ProductList
+              navigation={navigation}
+              data={item.data}
+              horizontal={true}
+              btnSeeMore={true}
+              id={item?._id}
+              type={item.name}
+            />
+          </View>
+        )}
+      />
+    </View>
   );
 };
 
@@ -84,8 +101,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingTop: 50,
     paddingBottom: 70,
-    // flexDirection: "column",
-    // justifyContent: "flex-start",
   },
   homeSearch: {
     flexDirection: "row",
@@ -100,9 +115,7 @@ const styles = StyleSheet.create({
   searchIcon: {
     paddingHorizontal: 16,
   },
-  category: {
-    // position: "absolute",
-  },
+  category: {},
   productHeading: {
     flexDirection: "row",
     alignContent: "center",

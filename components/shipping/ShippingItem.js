@@ -1,13 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext } from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useDispatch } from "react-redux";
-import { ShippingContext } from ".";
-import {
-  deleteShippingAction,
-  updateShippingAction,
-} from "../../redux/actions/shippingInfoAction";
+import { deleteShippingAction } from "../../redux/actions/shippingInfoAction";
 
 function ShippingItem({ item, isSelected, setCurrenIdShipping }) {
   const navigation = useNavigation();
@@ -24,10 +20,7 @@ function ShippingItem({ item, isSelected, setCurrenIdShipping }) {
   return (
     <TouchableOpacity
       onPress={() => handleOnPress()}
-      style={[
-        styles.container,
-        { borderColor: isSelected ? "#40BFFF" : "#EBF0FF" },
-      ]}
+      style={[styles.container, { borderColor: isSelected ? "#40BFFF" : "#EBF0FF" }]}
     >
       <Text style={styles.name}>{item?.fullName}</Text>
       <Text numberOfLines={3} style={styles.text}>
@@ -35,10 +28,7 @@ function ShippingItem({ item, isSelected, setCurrenIdShipping }) {
       </Text>
       <Text style={styles.text}>{item.phoneNumber}</Text>
       <View style={styles.action}>
-        <TouchableOpacity
-          onPress={() => handleEditShipping()}
-          style={styles.buttonAction}
-        >
+        <TouchableOpacity onPress={() => handleEditShipping()} style={styles.buttonAction}>
           <Text style={{ color: "white", textAlign: "center" }}>Edit</Text>
         </TouchableOpacity>
         <Icon

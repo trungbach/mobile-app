@@ -1,20 +1,20 @@
 import React from "react";
-import { View, Text, StatusBar, ScrollView } from "react-native";
+import { StatusBar, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Shipping from "../components/shipping";
 
-function ShipToScreen({route}) {
+function ShipToScreen({ route, navigation }) {
   return (
-    <View
+    <SafeAreaView
       style={{
         paddingTop: StatusBar.currentHeight,
         flex: 1,
         backgroundColor: "white",
         alignItems: "center",
-        paddingBottom: 80,
       }}
     >
-      <Shipping inCart={route?.params?.inCart} />
-    </View>
+      <Shipping navigation={navigation} />
+    </SafeAreaView>
   );
 }
 

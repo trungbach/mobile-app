@@ -14,6 +14,11 @@ const orderApi = {
     const url = "/orders/create";
     return axiosClient.post(url, data);
   },
+
+  checkOrderStatus: (data) => {
+    const url = "/orders/check-order-status";
+    return axiosClient.post(url, data);
+  },
 };
 
 export default orderApi;

@@ -1,22 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { unwrapResult } from "@reduxjs/toolkit";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserAction } from "../../../redux/actions/userActions";
 import Header from "../../base/Header";
 import CustomInput from "../../login/CustomInput";
-import { useIsFocused } from "@react-navigation/native";
-import { useForm, Controller } from "react-hook-form";
-import { Convert } from "../../../utils/Convert";
-import { useSelector, useDispatch } from "react-redux";
-import { userAction } from "../../../redux/slice/userSlice";
-import { updateUserAction } from "../../../redux/actions/userActions";
-import { unwrapResult } from "@reduxjs/toolkit";
 
 const PhoneNumber = ({ navigation, route }) => {
   const user = useSelector((state) => state.user.user);
-  const [index, setIndex] = useState(0);
-  const [phoneNumberNew, setPhoneNumberNew] = useState();
   const [indexInput, setIndexInput] = useState(10);
-  const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const {
     control,
@@ -37,20 +31,10 @@ const PhoneNumber = ({ navigation, route }) => {
       console.log(err);
     }
   };
-  /**
-   * Xử lý focus input mỗi khi màn hình được focus
-   */
-  //   useEffect(() => {
-  //     setPhoneNumberNew(route?.params?.value);
-  //   }, [isFocused]);
 
   return (
     <View style={styles.wrapper}>
-      <Header
-        style={styles.header}
-        header="Phone Number"
-        haveBack={true}
-      ></Header>
+      <Header style={styles.header} header="Phone Number" haveBack={true}></Header>
       <Text style={styles.label}>Phone Number</Text>
       <CustomInput
         index={1}
@@ -63,11 +47,7 @@ const PhoneNumber = ({ navigation, route }) => {
         name="phone"
         iconName="phone-iphone"
       ></CustomInput>
-      <TouchableOpacity
-        style={styles.button}
-        activeOpacity={0.5}
-        onPress={handleSubmit(save)}
-      >
+      <TouchableOpacity style={styles.button} activeOpacity={0.5} onPress={handleSubmit(save)}>
         <Text style={styles.textButton}>Save</Text>
       </TouchableOpacity>
     </View>

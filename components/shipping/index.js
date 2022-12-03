@@ -1,35 +1,59 @@
-import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useReducer, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  ScrollView,
-} from "react-native";
+import * as SecureStore from "expo-secure-store";
+import React, { useCallback, useEffect, useState } from "react";
+import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../commons/Loading";
+import { fetchListCartAction } from "../../redux/actions/cartAction";
 import { getListShippingAction } from "../../redux/actions/shippingInfoAction";
+import { cartAction } from "../../redux/slice/cartSlice";
 import orderApi from "../api/orderApi";
 import ShippingList from "./ShippingList";
-export const ShippingContext = React.createContext();
 
-function Shipping({ inCart }) {
+export const ShippingContext = React.createContext();
+function Shipping({ navigation }) {
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { listShipping, isLoading } = useSelector((state) => state.shipping);
   const { listCart, listPayment } = useSelector((state) => state.cart);
   const [currentIdShipping, setCurrenIdShipping] = useState();
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
+
+  const [orderMomoId, setOrderMomoId] = useState();
+
+  async function getOrderId() {
+    const orderMomoId = await SecureStore.getItemAsync("momoOrderId");
+    setOrderMomoId(orderMomoId);
+  }
+
+  async function checkOrderStatus(orderMomoId) {
+    console.log("orderMomoId", orderMomoId);
+    const checkOrderResponse = await orderApi.checkOrderStatus({ orderId: orderMomoId });
+    console.log("checkOrderResponse: ", checkOrderResponse);
+    if (checkOrderResponse.resultCode === 0) {
+      // order thanh toán thành công
+      await SecureStore.deleteItemAsync("momoOrderId");
+      navigation.navigate("Home", { paymentSuccess: true });
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      getOrderId();
+      return () => {};
+    }, [])
+  );
+
+  useEffect(() => {
+    if (orderMomoId) {
+      checkOrderStatus(orderMomoId);
+    }
+  }, [orderMomoId]);
+
   useEffect(() => {
     const getListShipping = async () => {
       if (user) {
-        await dispatch(getListShippingAction(user._id));
-        const defaultShipping = listShipping.find(
-          (item) => item?.default === true
-        );
+        dispatch(getListShippingAction(user._id));
+        const defaultShipping = listShipping.find((item) => item?.default === true);
         if (defaultShipping) {
           setCurrenIdShipping(defaultShipping._id);
         }
@@ -37,14 +61,10 @@ function Shipping({ inCart }) {
     };
     getListShipping();
   }, [user]);
-  // console.log(inCart);
 
-  const handleFinish = async () => {
+  const handlePayMomo = async () => {
     const totalItems = listPayment.reduce((totalItems, item) => {
-      return (
-        totalItems +
-        listCart.find((cartItem) => cartItem?._id === item)?.quantity
-      );
+      return totalItems + listCart.find((cartItem) => cartItem?._id === item)?.quantity;
     }, 0);
     const totalPrice = listPayment.reduce((totalPrice, item) => {
       const currentItem = listCart.find((cartItem) => cartItem?._id === item);
@@ -58,14 +78,19 @@ function Shipping({ inCart }) {
       orders_id: listPayment,
     };
     try {
-      await orderApi.addOrder(newOrder);
-
-      navigation.navigate("Success");
+      let orderResponse = await orderApi.addOrder(newOrder);
+      console.log("orderResponse", JSON.parse(orderResponse));
+      orderResponse = JSON.parse(orderResponse);
+      if (orderResponse.deeplink && orderResponse.orderId) {
+        await SecureStore.setItemAsync("momoOrderId", orderResponse.orderId);
+        dispatch(cartAction.setListPayment([]));
+        dispatch(fetchListCartAction(user?._id)); // lay lai danh sach cart
+        await Linking.openURL(orderResponse.deeplink);
+      }
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(inCart);
   return (
     <View>
       {listShipping.length > 0 ? (
@@ -77,14 +102,9 @@ function Shipping({ inCart }) {
                 currentIdShipping={currentIdShipping}
                 setCurrenIdShipping={setCurrenIdShipping}
               />
-              {/* {inCart && ( */}
-              <TouchableOpacity
-                onPress={() => handleFinish()}
-                style={styles.actionButton}
-              >
-                <Text style={styles.textAction}>Finish</Text>
+              <TouchableOpacity onPress={() => handlePayMomo()} style={styles.actionButton}>
+                <Text style={styles.textAction}>Pay</Text>
               </TouchableOpacity>
-              {/* )} */}
             </ScrollView>
           </View>
         ) : (

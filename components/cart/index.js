@@ -1,38 +1,29 @@
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  ScrollView,
-} from "react-native";
+import React, { useEffect } from "react";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { CheckBox } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../commons/Loading";
 import { fetchListCartAction } from "../../redux/actions/cartAction";
 import { cartAction } from "../../redux/slice/cartSlice";
-import axiosClient from "../api/axiosClient";
 import CartInvoice from "./CartInvoice";
 import CartList from "./CartList";
-import Notify from "./../../commons/Notifycation";
 
 function Cart() {
   const navigation = useNavigation();
-  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const { listCart, isLoading } = useSelector((state) => state.cart);
-  useEffect(() => {
-    dispatch(fetchListCartAction(user?._id));
-  }, [user]);
-
+  const { user } = useSelector((state) => state.user);
   const { listPayment } = useSelector((state) => state.cart);
+  const { listCart, isLoading } = useSelector((state) => state.cart);
+
+  // useEffect(() => {
+  //   if (user?.id) {
+  //     dispatch(fetchListCartAction(user?._id));
+  //   }
+  // }, [user]);
 
   const totalItems = listPayment.reduce((totalItems, item) => {
-    return (
-      totalItems + listCart.find((cartItem) => cartItem?._id === item)?.quantity
-    );
+    return totalItems + listCart.find((cartItem) => cartItem?._id === item)?.quantity;
   }, 0);
   const totalPrice = listPayment.reduce((totalPrice, item) => {
     const currentItem = listCart.find((cartItem) => cartItem?._id === item);
@@ -56,6 +47,7 @@ function Cart() {
     for (let cartItem of listCart) {
       payments.push(cartItem._id);
     }
+    console.log("payments", payments);
     dispatch(cartAction.setListPayment(payments));
   };
 
@@ -78,9 +70,14 @@ function Cart() {
             style={styles.buttonCheckOut}
             disabled={totalItems === 0}
           >
-            <Text style={{ textAlign: "center", color: "white" }}>
-              Check Out
-            </Text>
+            {/* <Image
+              source={require("../../static/images/ic_momo.png")}
+              style={{
+                width: 40,
+                height: 40,
+              }}
+            ></Image> */}
+            <Text style={{ textAlign: "center", color: "white" }}>Check Out With Momo</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

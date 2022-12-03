@@ -1,16 +1,9 @@
 import React from "react";
-import {
-  ActivityIndicator, Image,
-  StyleSheet,
-  Text,
-  View
-} from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 
-const Loading = ({fade}) => {
+const Loading = () => {
   return (
     <View style={styles.container}>
-     
-      
       <ActivityIndicator color="#40BFFF" size={40} />
     </View>
   );
@@ -26,9 +19,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     zIndex: 2,
     paddingBottom: 70,
-  
-    // height: Dimensions.get("screen").height,
-    // width: Dimensions.get("screen").width,
   },
   logo: {
     width: 75.35,

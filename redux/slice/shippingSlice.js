@@ -18,7 +18,6 @@ const shippingSlice = createSlice({
   extraReducers: (builder) =>
     builder
       .addCase(getListShippingAction.pending, (state) => {
-        console.log("pendding");
         state.isLoading = true;
       })
       .addCase(getListShippingAction.fulfilled, (state, action) => {
@@ -34,11 +33,8 @@ const shippingSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(deleteShippingAction.fulfilled, (state, action) => {
-        
         state.isLoading = false;
-        state.listShipping = state.listShipping.filter(
-          (item) => item._id != action.payload
-        );
+        state.listShipping = state.listShipping.filter((item) => item._id != action.payload);
       })
       .addCase(deleteShippingAction.rejected, (state, action) => {
         state.isLoading = false;
@@ -50,9 +46,7 @@ const shippingSlice = createSlice({
       .addCase(updateShippingAction.fulfilled, (state, action) => {
         state.isLoading = false;
         console.log("update ok");
-        const index = state.listShipping.findIndex(
-          (item) => item._id == action.payload._id
-        );
+        const index = state.listShipping.findIndex((item) => item._id == action.payload._id);
         state.listShipping[index] = {
           ...state.listShipping[index],
           ...action.payload,
@@ -75,5 +69,4 @@ const shippingSlice = createSlice({
         state.isLoading = false;
       }),
 });
-export const { actions: shippingAction, reducer: shippingReducer } =
-  shippingSlice;
+export const { actions: shippingAction, reducer: shippingReducer } = shippingSlice;

@@ -1,4 +1,4 @@
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import PopupNoti from "../base/PopupNoti";
@@ -6,7 +6,6 @@ import ProductList from "../base/ProductList";
 
 export default function SearchModel({ visible, data, reloadScreen }) {
   const navigation = useNavigation();
-  const isFocused = useIsFocused(false);
   // Nếu chưa gõ search
   if (!visible) return <Text></Text>;
 
@@ -16,8 +15,7 @@ export default function SearchModel({ visible, data, reloadScreen }) {
     <View style={styles.model}>
       <View>
         <Text style={styles.text}>
-          {(data && data.total_products > 0 ? data.total_products : 0) +
-            " Kết quả"}
+          {(data && data.total_products > 0 ? data.total_products : 0) + " Kết quả"}
         </Text>
       </View>
       {data && data.total_products == 0 ? (
@@ -40,7 +38,6 @@ export default function SearchModel({ visible, data, reloadScreen }) {
       )}
     </View>
   );
-  // );
 }
 const styles = StyleSheet.create({
   model: {

@@ -21,7 +21,7 @@ export const registerAction = createAsyncThunk(
 );
 
 export const updateUserAction = createAsyncThunk(
-  "user",
+  "updateUsername",
   async ({ id, data }, { rejectWithValue, dispatch }) => {
     try {
       const user = await userApi.updateProfile(id, data);
@@ -38,43 +38,36 @@ export const updateUserAction = createAsyncThunk(
   }
 );
 
-export const loginAction = createAsyncThunk(
-  "auth/login",
-  async (data, { rejectWithValue }) => {
-    try {
-      const response = await userApi.login(data);
-      const { token, user } = response;
+export const loginAction = createAsyncThunk("auth/login", async (data, { rejectWithValue }) => {
+  try {
+    const response = await userApi.login(data);
+    const { token, user } = response;
+    await SecureStore.setItemAsync("token", token);
 
-      await SecureStore.setItemAsync("token", token);
-
-      return user;
-    } catch (error) {
-      console.log(error.message);
-      const { status } = error.response;
-      if (status === 400) {
-        return rejectWithValue("Wrong username or password");
-      } else {
-        return rejectWithValue("Failed");
-      }
+    return user;
+  } catch (error) {
+    console.log(error.message);
+    const { status } = error.response;
+    if (status === 400) {
+      return rejectWithValue("Wrong username or password");
+    } else {
+      return rejectWithValue("Failed");
     }
   }
-);
+});
 
-export const getUserbyIdAction = createAsyncThunk(
-  "userById",
-  async (id, { rejectWithValue }) => {
-    console.log(id);
-    try {
-      const user = await userApi.getUserbyId(id);
-      return user;
-    } catch (error) {
-      console.log(error.message);
-      const { status } = error.response;
-      if (status === 400) {
-        return rejectWithValue("Failed");
-      } else {
-        return rejectWithValue("Server error");
-      }
+export const getUserbyIdAction = createAsyncThunk("userById", async (id, { rejectWithValue }) => {
+  console.log(id);
+  try {
+    const user = await userApi.getUserbyId(id);
+    return user;
+  } catch (error) {
+    console.log(error.message);
+    const { status } = error.response;
+    if (status === 400) {
+      return rejectWithValue("Failed");
+    } else {
+      return rejectWithValue("Server error");
     }
   }
-);
+});

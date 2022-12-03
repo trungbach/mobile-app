@@ -6,13 +6,9 @@ import { store } from "./redux/store";
 export default function App() {
   LogBox.ignoreAllLogs();
   return (
-    // <View>
     <Provider store={store}>
       <AppNav style={styles.container} />
     </Provider>
-
-    /* <CategoryNav /> */
-    /* </View> */
   );
 }
 

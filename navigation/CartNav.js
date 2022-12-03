@@ -1,10 +1,10 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SuccessScreen from "./../screens/SuccessScreen"
-import CartScreen from "./../screens/CartScreen";
-import ShipToScreen from "./../screens/ShipToScreen";
+import SuccessScreen from "../screens/SuccessScreen";
+import CartScreen from "../screens/CartScreen";
+import ShipToScreen from "../screens/ShipToScreen";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
-import EditShipingScreen from "./../screens/EditShipingScreen";
+import EditShipingScreen from "../screens/EditShipingScreen";
 
 const Stacks = createNativeStackNavigator();
 const screens = [
@@ -51,9 +51,7 @@ function CartNav() {
           options={({ route }) => ({
             title: route?.params?.title || item?.name,
             headerRight:
-              typeof item?.headerRight === "function"
-                ? item?.headerRight(navigation)
-                : null,
+              typeof item?.headerRight === "function" ? item?.headerRight(navigation) : null,
             headerStyle: {},
             headerTintColor: "#223263",
             headerTitleStyle: {

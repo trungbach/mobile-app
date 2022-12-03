@@ -20,8 +20,7 @@ const schema = yup
   .required();
 
 const Login = ({ route, navigation }) => {
-  const [toggleVisibilityPassword, setToggleVisibilityPassword] =
-    useState(false);
+  const [toggleVisibilityPassword, setToggleVisibilityPassword] = useState(false);
   const dispatch = useDispatch();
   const [err, seterr] = useState();
 
@@ -29,11 +28,13 @@ const Login = ({ route, navigation }) => {
     try {
       const user = await dispatch(loginAction(data));
       const result = unwrapResult(user);
+
       dispatch(userAction.setUser(result));
       navigation.navigate("BottomNav", {
         screen: "home",
       });
     } catch (error) {
+      console.log("err", error);
       seterr(error);
     }
   };
@@ -86,18 +87,13 @@ const Login = ({ route, navigation }) => {
             control={control}
             errors={errors}
             secureTextEntry={!toggleVisibilityPassword}
-            secondIcon={`${
-              toggleVisibilityPassword ? "visibility" : "visibility-off"
-            }`}
+            secondIcon={`${toggleVisibilityPassword ? "visibility" : "visibility-off"}`}
             setToggleVisibilityPassword={() =>
               setToggleVisibilityPassword(!toggleVisibilityPassword)
             }
           />
 
-          <TouchableOpacity
-            onPress={handleSubmit(onSubmit)}
-            style={styles.signInButton}
-          >
+          <TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.signInButton}>
             <Text style={styles.signInButtonText}>Sign In</Text>
           </TouchableOpacity>
         </View>

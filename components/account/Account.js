@@ -1,12 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
+import * as SecureStore from "expo-secure-store";
 import React from "react";
+import { StyleSheet, View } from "react-native";
+import { useDispatch } from "react-redux";
+import { FieldRoleConstant } from "../../commons/constants/field-role.constant";
+import { userAction } from "../../redux/slice/userSlice";
 import Header from "../base/Header";
 import Field from "./Field";
-import { FieldRoleConstant } from "../../commons/constants/field-role.constant";
-import Login from "./../login/Login";
-import * as SecureStore from "expo-secure-store";
-import { useDispatch } from "react-redux";
-import { userAction } from "../../redux/slice/userSlice";
 
 const Account = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -18,16 +17,15 @@ const Account = ({ navigation }) => {
           key={index}
           label={item.label}
           iconName={item.iconName}
-          onPress={async() => {
+          onPress={async () => {
             if (item.label == "Logout") {
               console.log("logout");
               await SecureStore.deleteItemAsync("token");
               dispatch(userAction.setUser(null));
-              
+
               navigation.navigate("LoginNav");
-              return ;
+              return;
             }
-           
 
             navigation.navigate(item.label);
           }}
