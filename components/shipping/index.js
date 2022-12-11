@@ -4,11 +4,13 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../commons/Loading";
+import Notifycation from "../../commons/Notifycation";
 import { fetchListCartAction } from "../../redux/actions/cartAction";
 import { getListShippingAction } from "../../redux/actions/shippingInfoAction";
 import { cartAction } from "../../redux/slice/cartSlice";
 import orderApi from "../api/orderApi";
 import ShippingList from "./ShippingList";
+import { useIsFocused } from "@react-navigation/native";
 
 export const ShippingContext = React.createContext();
 function Shipping({ navigation }) {
@@ -17,8 +19,28 @@ function Shipping({ navigation }) {
   const { listShipping, isLoading } = useSelector((state) => state.shipping);
   const { listCart, listPayment } = useSelector((state) => state.cart);
   const [currentIdShipping, setCurrenIdShipping] = useState();
+  const [messages, setMessages] = useState([]);
 
   const [orderMomoId, setOrderMomoId] = useState();
+
+  const isFocused = useIsFocused();
+  /**
+   * Xử lý focus input mỗi khi màn hình được focus:
+   * Back về màn cart nếu ko có order nào để thanh toán.
+   */
+  useEffect(() => {
+    if (isFocused) {
+      getOrderIdInStore();
+    }
+  }, [isFocused]);
+
+  async function getOrderIdInStore() {
+    const orderMomoId = await SecureStore.getItemAsync("momoOrderId");
+    if (!orderMomoId && listPayment.length === 0) {
+      navigation.navigate("Your Cart");
+    }
+    return null;
+  }
 
   async function getOrderId() {
     const orderMomoId = await SecureStore.getItemAsync("momoOrderId");
@@ -33,9 +55,19 @@ function Shipping({ navigation }) {
       // order thanh toán thành công
       await SecureStore.deleteItemAsync("momoOrderId");
       navigation.navigate("Home", { paymentSuccess: true });
+    } else {
+      setMessages([
+        ...messages,
+        {
+          content: checkOrderResponse.message,
+          color: "red",
+        },
+      ]);
+      await SecureStore.deleteItemAsync("momoOrderId");
     }
   }
 
+  // tim nạp lại order momo id sau mỗi lần truy cập để cập nhật trạng thái order
   useFocusEffect(
     useCallback(() => {
       getOrderId();
@@ -62,7 +94,9 @@ function Shipping({ navigation }) {
     getListShipping();
   }, [user]);
 
+  // xu ly thanh toan
   const handlePayMomo = async () => {
+    await getOrderIdInStore();
     const totalItems = listPayment.reduce((totalItems, item) => {
       return totalItems + listCart.find((cartItem) => cartItem?._id === item)?.quantity;
     }, 0);
@@ -79,8 +113,7 @@ function Shipping({ navigation }) {
     };
     try {
       let orderResponse = await orderApi.addOrder(newOrder);
-      console.log("orderResponse", JSON.parse(orderResponse));
-      orderResponse = JSON.parse(orderResponse);
+      console.log("orderResponse", orderResponse);
       if (orderResponse.deeplink && orderResponse.orderId) {
         await SecureStore.setItemAsync("momoOrderId", orderResponse.orderId);
         dispatch(cartAction.setListPayment([]));
@@ -88,11 +121,36 @@ function Shipping({ navigation }) {
         await Linking.openURL(orderResponse.deeplink);
       }
     } catch (error) {
-      console.log(error);
+      setMessages([
+        ...messages,
+        {
+          content: "Error create Momo order in test environment. Try again.",
+          color: "red",
+        },
+      ]);
+      console.log("Error create Momo order:", error);
     }
   };
+
+  const handleConfirmPaid = async () => {
+    const orderMomoId = await SecureStore.getItemAsync("momoOrderId");
+    console.log("handleConfirmPaid orderMomoId: ", orderMomoId);
+    if (!orderMomoId) {
+      setMessages([
+        ...messages,
+        {
+          content: "You don't have any successful payment.",
+          color: "red",
+        },
+      ]);
+    } else {
+      setOrderMomoId(orderMomoId);
+    }
+  };
+
   return (
     <View>
+      <Notifycation messages={messages} setMessages={setMessages} style={{ zIndex: 1 }} />
       {listShipping.length > 0 ? (
         !isLoading ? (
           <View contentContainerStyle={styles.container}>
@@ -104,6 +162,9 @@ function Shipping({ navigation }) {
               />
               <TouchableOpacity onPress={() => handlePayMomo()} style={styles.actionButton}>
                 <Text style={styles.textAction}>Pay</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleConfirmPaid()} style={styles.actionButton}>
+                <Text style={styles.textAction}>Confirm you have paid</Text>
               </TouchableOpacity>
             </ScrollView>
           </View>
@@ -132,6 +193,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#40BFFF",
     borderRadius: 5,
     justifyContent: "center",
+    marginBottom: 10,
   },
   textAction: {
     textAlign: "center",

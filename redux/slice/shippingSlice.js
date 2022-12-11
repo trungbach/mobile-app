@@ -45,7 +45,6 @@ const shippingSlice = createSlice({
 
       .addCase(updateShippingAction.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log("update ok");
         const index = state.listShipping.findIndex((item) => item._id == action.payload._id);
         state.listShipping[index] = {
           ...state.listShipping[index],

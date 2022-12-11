@@ -2,38 +2,28 @@ import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 
 function CartInvoice({ totalPrice, totalItems }) {
-  const shippingPrice = totalItems === 0 ? 0 :20;
-  const importCharge =  totalItems === 0 ? 0 :20;
+  const shippingPrice = totalItems === 0 ? 0 : 20;
   return (
     <View style={styles.invoice}>
       <View style={styles.invoiceItem}>
         <Text style={styles.invoiceTitle}>{`Item(${totalItems})`}</Text>
-        <Text style={styles.invoiceContent}>{totalPrice}</Text>
+        <Text style={styles.invoiceContent}>{totalPrice} VND</Text>
       </View>
       <View style={styles.invoiceItem}>
         <Text style={styles.invoiceTitle}>Shipping</Text>
-        <Text style={styles.invoiceContent}>${shippingPrice}</Text>
+        <Text style={styles.invoiceContent}> {shippingPrice} VND</Text>
       </View>
       <View style={styles.invoiceItem}>
-        <Text style={styles.invoiceTitle}>Import charges</Text>
-        <Text style={styles.invoiceContent}>${importCharge}</Text>
+        <Text style={styles.invoiceTitle}>Import charges (10%)</Text>
+        {/* 10% VAT */}
+        <Text style={styles.invoiceContent}> {totalPrice * 0.1} VND</Text>
       </View>
       <View style={[styles.invoiceItem, styles.totalPrice]}>
-        <Text
-          style={[
-            styles.invoiceTitle,
-            { fontWeight: "bold", color: "#223263" },
-          ]}
-        >
+        <Text style={[styles.invoiceTitle, { fontWeight: "bold", color: "#223263" }]}>
           Total Price
         </Text>
-        <Text
-          style={[
-            styles.invoiceContent,
-            { fontWeight: "bold", color: "#40BFFF" },
-          ]}
-        >
-          {totalPrice + importCharge + shippingPrice}
+        <Text style={[styles.invoiceContent, { fontWeight: "bold", color: "#40BFFF" }]}>
+          {totalPrice + totalPrice * 0.1 + shippingPrice} VND
         </Text>
       </View>
     </View>

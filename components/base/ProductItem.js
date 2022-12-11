@@ -49,12 +49,12 @@ export default function ProductItem({ item }) {
             )}
           </View>
           <View>
-            <Text style={styles.itemPrice}>{`$${Math.round((item.price * 10) / 10)}.00`}</Text>
+            <Text style={styles.itemPrice}>{`${Math.round((item.price * 10) / 10)} VND`}</Text>
           </View>
           <View style={styles.saleBox}>
-            <Text style={styles.itemOldPrice}>{`$${
+            <Text style={styles.itemOldPrice}>{`${
               item.price + (item.discount * item.price) / 100
-            }`}</Text>
+            } VND`}</Text>
             <Text style={styles.itemSaleOff}>{`${item.discount}% Off`}</Text>
           </View>
         </View>
@@ -75,10 +75,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     maxWidth: 170,
     width: 170,
-    // height: 238,
     marginHorizontal: 8,
-    // alignItems: "center",
-    // justifyContent: "flex-start",
     padding: 16,
     borderRadius: 10,
   },
@@ -113,8 +110,6 @@ const styles = StyleSheet.create({
   },
   specification: {
     fontSize: 12,
-    // fontWeight: "bold",
     color: "#9098B1",
-    // marginBottom: 12,
   },
 });

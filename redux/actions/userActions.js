@@ -46,7 +46,7 @@ export const loginAction = createAsyncThunk("auth/login", async (data, { rejectW
 
     return user;
   } catch (error) {
-    console.log(error.message);
+    console.log("error", error.message);
     const { status } = error.response;
     if (status === 400) {
       return rejectWithValue("Wrong username or password");

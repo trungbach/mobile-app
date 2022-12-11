@@ -49,7 +49,6 @@ const cartSlice = createSlice({
       .addCase(deleteCartAction.rejected, (state, action) => {})
       .addCase(updateCartAction.pending, (state) => {})
       .addCase(updateCartAction.fulfilled, (state, action) => {
-        console.log("update ok");
         const index = state.listCart.findIndex((item) => item._id == action.payload._id);
         state.listCart[index] = { ...state.listCart[index], ...action.payload };
       })

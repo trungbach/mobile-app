@@ -3,9 +3,10 @@ import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/nativ
 import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useDispatch, useSelector } from "react-redux";
 import { SortEnum } from "../../commons/enums/sort.enum";
 import Loading from "../../commons/Loading";
-import homeApi from "../api/homeApi";
+import { searchProduct } from "../../redux/actions/searchAction";
 import Filter from "./Filter";
 import SearchModel from "./SearchModel";
 import Sort from "./Sort";
@@ -15,8 +16,8 @@ const _ = require("lodash");
 const Search = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const [keyword, setKeyword] = useState("");
-  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
+  const [name, setName] = useState("");
   const [notFound, setNotFound] = useState("");
   const [visible, setVisible] = useState(false);
   const [isShowSort, setIsShowSort] = useState(false);
@@ -28,7 +29,8 @@ const Search = () => {
   const [min, setMin] = useState(null);
   const [max, setMax] = useState(null);
   const textInputRef = useRef(null);
-  const [isLoading, setLoading] = useState(true);
+  const { searchLoading, searchResult } = useSelector((state) => state.home);
+
   useFocusEffect(
     React.useCallback(() => {
       if (route?.params) {
@@ -37,53 +39,41 @@ const Search = () => {
       return () => {};
     }, [route?.params])
   );
-  useFocusEffect(
-    React.useCallback(() => {
-      handleSearch(keyword);
-      return () => {};
-    }, [sortBy])
-  );
+
+  useEffect(() => {
+    handleSearch();
+  }, [name, sortBy, min, max]);
+
   /**
    * Xử lý khi input thay đổi
-   * @param {*} param0
    */
   const handleChange = ({ nativeEvent }) => {
     const { text } = nativeEvent;
-    setKeyword(text);
-    debounceSearch(text);
+    setName(text);
   };
 
   /**
    * reload lại khi dữ liệu bị thay đổi
    */
   const reloadScreen = function () {
-    handleSearch(keyword);
+    handleSearch(name);
   };
 
   /**
-   * debounce search
-   */
-  const debounceSearch = useRef(_.debounce((nextValue) => handleSearch(nextValue), 500)).current;
-
-  /**
    * Gọi api search
-   * @param {*} value keyword
    */
-  const handleSearch = async (value) => {
+  const handleSearch = async () => {
     try {
-      setLoading(true);
-      var res = await homeApi.searchProduct({
-        name: value,
-        sort_by: sortBy,
-        min: min,
-        max: max,
-      });
-      setLoading(false);
-      setData(res);
+      dispatch(
+        searchProduct({
+          name: name,
+          sort_by: sortBy,
+          min: min,
+          max: max,
+        })
+      );
       setVisible(true);
     } catch (err) {
-      setLoading(false);
-      setData([]);
       setNotFound("Có lỗi xảy ra vui lòng thử lại!");
       console.log(err);
     }
@@ -128,16 +118,16 @@ const Search = () => {
           <TextInput
             ref={textInputRef}
             autoFocus={true}
-            value={keyword}
+            value={name}
             onChange={handleChange}
             style={styles.inputSearch}
             placeholder="Search Product"
             clearButtonMode="always"
           />
-          {keyword.length > 0 && (
+          {name.length > 0 && (
             <TouchableOpacity
               onPress={() => {
-                setKeyword("");
+                setName("");
               }}
               style={styles.clear}
             >
@@ -164,11 +154,11 @@ const Search = () => {
           ></Icon>
         )}
       </View>
-      {!isLoading ? (
+      {!searchLoading ? (
         <SearchModel
           reloadScreen={reloadScreen}
           visible={visible}
-          data={data}
+          data={searchResult}
           notFound={notFound}
         ></SearchModel>
       ) : (

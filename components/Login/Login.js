@@ -98,25 +98,6 @@ const Login = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.footer}>
-          <View style={styles.orBox}>
-            <Text style={styles.line}></Text>
-            <Text style={styles.or}>OR</Text>
-            <Text style={styles.line}></Text>
-          </View>
-          <TouchableOpacity style={styles.loginWith}>
-            <Image
-              source={require("../../static/images/login/Google.png")}
-              style={styles.socialIconGoogle}
-            />
-            <Text style={styles.loginWithText}>Login with Google</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.loginWith}>
-            <Image
-              source={require("../../static/images/login/Vector.png")}
-              style={styles.socialIconFacebook}
-            />
-            <Text style={styles.loginWithText}>Login with Facebook</Text>
-          </TouchableOpacity>
           <TouchableOpacity>
             <Text style={styles.forgotPass}>Forgot Password?</Text>
           </TouchableOpacity>

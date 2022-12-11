@@ -1,10 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect } from "react";
+import React from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { CheckBox } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../commons/Loading";
-import { fetchListCartAction } from "../../redux/actions/cartAction";
 import { cartAction } from "../../redux/slice/cartSlice";
 import CartInvoice from "./CartInvoice";
 import CartList from "./CartList";
@@ -12,15 +11,8 @@ import CartList from "./CartList";
 function Cart() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
   const { listPayment } = useSelector((state) => state.cart);
   const { listCart, isLoading } = useSelector((state) => state.cart);
-
-  // useEffect(() => {
-  //   if (user?.id) {
-  //     dispatch(fetchListCartAction(user?._id));
-  //   }
-  // }, [user]);
 
   const totalItems = listPayment.reduce((totalItems, item) => {
     return totalItems + listCart.find((cartItem) => cartItem?._id === item)?.quantity;
@@ -47,7 +39,6 @@ function Cart() {
     for (let cartItem of listCart) {
       payments.push(cartItem._id);
     }
-    console.log("payments", payments);
     dispatch(cartAction.setListPayment(payments));
   };
 

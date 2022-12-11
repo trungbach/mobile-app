@@ -13,6 +13,7 @@ const homeApi = {
 
   searchProduct: (params) => {
     const url = "search";
+    console.log("params", params);
     return axiosClient.get(url, { params });
   },
 };

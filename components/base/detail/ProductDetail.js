@@ -1,6 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { unwrapResult } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
@@ -15,6 +14,7 @@ import SizeChoose from "./colorsAndSizes/SizeChoose";
 import Review from "./comment/Review";
 import ProductDescription from "./ProductDescription";
 import Quantity from "./Quantity";
+
 const ProductDetail = ({ route }) => {
   const { _id } = route.params.item;
   const [currentProduct, setCurrentProduct] = useState();
@@ -78,7 +78,6 @@ const ProductDetail = ({ route }) => {
             size,
             color,
             user_id: user._id,
-            // product: { ...currentProduct },
           };
           try {
             dispatch(addCartAction(data));
@@ -167,7 +166,7 @@ const ProductDetail = ({ route }) => {
             )}
           </View>
           <View style={styles.price}>
-            <Text style={styles.priceText}>{`$${route.params.item.price}.00`}</Text>
+            <Text style={styles.priceText}>{`${route.params.item.price}`} VND</Text>
           </View>
 
           <SizeChoose sizes={currentProduct?.sizes} setSize={setSize} />

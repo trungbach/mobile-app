@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { CheckBox } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteCartAction,
-  updateCartAction,
-} from "../../redux/actions/cartAction";
+import { deleteCartAction, updateCartAction } from "../../redux/actions/cartAction";
 import { cartAction } from "../../redux/slice/cartSlice";
 function CartItem({ item }) {
   const { listPayment } = useSelector((state) => state.cart);
-  const isSelected =
-    listPayment.findIndex((paymentItem) => paymentItem === item?._id) >= 0;
+  const isSelected = listPayment.findIndex((paymentItem) => paymentItem === item?._id) >= 0;
   const dispatch = useDispatch();
   const handleDeleteCart = () => {
     dispatch(deleteCartAction(item?._id));
@@ -60,27 +56,17 @@ function CartItem({ item }) {
               {item.size} {item?.color}
             </Text>
           </View>
-          <Text style={[styles.text, { color: "#40BFFF" }]}>
-            ${item?.product?.price}
-          </Text>
+          <Text style={[styles.text, { color: "#40BFFF" }]}>{item?.product?.price} VND</Text>
         </View>
       </View>
       <View style={styles.action}>
-        <TouchableOpacity
-          onPress={() => handleUpdateQuantity(-1)}
-          style={styles.buttonAction}
-        >
+        <TouchableOpacity onPress={() => handleUpdateQuantity(-1)} style={styles.buttonAction}>
           <Text style={styles.textButtonAction}>-</Text>
         </TouchableOpacity>
-        <View
-          style={[{ flex: 1, backgroundColor: "#EBF0FF" }, styles.buttonAction]}
-        >
+        <View style={[{ flex: 1, backgroundColor: "#EBF0FF" }, styles.buttonAction]}>
           <Text style={[styles.textButtonAction]}>{item.quantity}</Text>
         </View>
-        <TouchableOpacity
-          onPress={() => handleUpdateQuantity(1)}
-          style={styles.buttonAction}
-        >
+        <TouchableOpacity onPress={() => handleUpdateQuantity(1)} style={styles.buttonAction}>
           <Text style={styles.textButtonAction}>+</Text>
         </TouchableOpacity>
       </View>

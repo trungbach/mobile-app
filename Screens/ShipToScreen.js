@@ -13,7 +13,7 @@ function ShipToScreen({ route, navigation }) {
         alignItems: "center",
       }}
     >
-      <Shipping navigation={navigation} />
+      <Shipping navigation={navigation} route={route} />
     </SafeAreaView>
   );
 }

@@ -28,6 +28,7 @@ axiosClient.interceptors.response.use(
     throw error;
   }
 );
+
 axiosClient.interceptors.request.use(async (config) => {
   const customHeaders = {};
   const token = await SecureStore.getItemAsync("token");

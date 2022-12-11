@@ -1,5 +1,4 @@
 import React from "react";
-import { FlatList } from "react-native";
 import CartItem from "./CartItem";
 
 function CartList({ listCart }) {
