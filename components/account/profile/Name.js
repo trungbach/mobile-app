@@ -5,7 +5,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUserAction } from "../../../redux/actions/userActions";
 import Header from "../../base/Header";
-import CustomInput from "../../login/CustomInput";
+import CustomInput from "../../auth/CustomInput";
 
 const Name = ({ navigation }) => {
   const user = useSelector((state) => state.user.user);

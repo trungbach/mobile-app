@@ -1,18 +1,17 @@
-import { StyleSheet, Text, View, FlatList, ScrollView } from "react-native";
-import Header from "../../base/Header";
-import React, { useState, useRef, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
-import orderApi from "../../api/orderApi";
-import { useSelector } from "react-redux";
-import ProductItemV2 from "../../base/ProductItemV2";
+import React, { useEffect, useState } from "react";
+import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import StepIndicator from "react-native-step-indicator";
 import { statusOrderEnum } from "../../../commons/enums/status-order.enum";
 import { Convert } from "../../../utils/Convert";
+import orderApi from "../../api/orderApi";
+import Header from "../../base/Header";
+import ProductItemV2 from "../../base/ProductItemV2";
 
-const OrderDetail = ({ navigation, route }) => {
+const OrderDetail = ({ route }) => {
   const [order, setOrder] = useState([]);
-  const user = useSelector((state) => state.user.user);
   const isFocused = useIsFocused();
+
   const labels = [
     statusOrderEnum.packing,
     statusOrderEnum.shipping,
@@ -46,10 +45,10 @@ const OrderDetail = ({ navigation, route }) => {
    * Xử lý focus input mỗi khi màn hình được focus
    */
   useEffect(() => {
-    // const res = orderApi.getOrderByUserId({user_id: user._id});
-    orderet();
+    getOrders();
   }, [isFocused]);
-  const orderet = async () => {
+
+  const getOrders = async () => {
     const res = await orderApi.getOrderDetail(route?.params?.item._id);
     setOrder(res);
   };
@@ -78,22 +77,13 @@ const OrderDetail = ({ navigation, route }) => {
                 ></ProductItemV2>
               )}
             ></FlatList>
-            {/* {order?.order_products.map((item, index) => (
-              <ProductItemV2
-                item={{ ...item?.order_product_item }}
-                //   keyExtractor={(item) => item?.order_product_item?._id}
-                key={index}
-              ></ProductItemV2>
-            ))} */}
           </View>
           <View style={styles.listItemContain}>
             <Text style={styles.title}>Shipping Details</Text>
             <View style={styles.shippingDetail}>
               <View style={styles.field}>
                 <Text style={styles.label}>Date Shipping</Text>
-                <Text style={styles.text}>
-                  {Convert.formatDatetime(order.shippedDate)}
-                </Text>
+                <Text style={styles.text}>{Convert.formatDatetime(order.shippedDate)}</Text>
               </View>
               <View style={styles.field}>
                 <Text style={styles.label}>No. Resi</Text>
@@ -101,9 +91,7 @@ const OrderDetail = ({ navigation, route }) => {
               </View>
               <View style={styles.fieldBottom}>
                 <Text style={styles.label}>Address</Text>
-                <Text style={styles.text}>
-                  {order?.shipping_infomation?.address}
-                </Text>
+                <Text style={styles.text}>{order?.shipping_infomation?.address}</Text>
               </View>
             </View>
           </View>
@@ -111,9 +99,7 @@ const OrderDetail = ({ navigation, route }) => {
             <Text style={styles.title}>Shipping Details</Text>
             <View style={styles.shippingDetail}>
               <View style={styles.field}>
-                <Text
-                  style={styles.label}
-                >{`Items (${order?.quantity_items})`}</Text>
+                <Text style={styles.label}>{`Items (${order?.quantity_items})`}</Text>
                 <Text style={styles.text}>{`$${order?.total_price}`}</Text>
               </View>
               <View style={styles.field}>
@@ -122,9 +108,7 @@ const OrderDetail = ({ navigation, route }) => {
               </View>
               <View style={styles.fieldBottom}>
                 <Text style={styles.labelBold}>Total Price</Text>
-                <Text style={styles.textActive}>{`$${
-                  order?.total_price + 20
-                }`}</Text>
+                <Text style={styles.textActive}>{`$${order?.total_price + 20}`}</Text>
               </View>
             </View>
           </View>
@@ -142,8 +126,6 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#fff",
     paddingTop: 100,
-    // marginBottom: 200,
-    // marginBottom: 60,
     paddingBottom: 100,
   },
   content: {

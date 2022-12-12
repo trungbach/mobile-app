@@ -4,10 +4,9 @@ import * as SecureStore from "expo-secure-store";
 import { userAction } from "../slice/userSlice";
 export const registerAction = createAsyncThunk(
   "auth/register",
-  async (data, { rejectWithValue, dispatch }) => {
+  async (data, { rejectWithValue }) => {
     try {
       const user = await userApi.register(data);
-      const { email, password } = user;
       return user;
     } catch (error) {
       const { status } = error.response;
@@ -57,12 +56,10 @@ export const loginAction = createAsyncThunk("auth/login", async (data, { rejectW
 });
 
 export const getUserbyIdAction = createAsyncThunk("userById", async (id, { rejectWithValue }) => {
-  console.log(id);
   try {
     const user = await userApi.getUserbyId(id);
     return user;
   } catch (error) {
-    console.log(error.message);
     const { status } = error.response;
     if (status === 400) {
       return rejectWithValue("Failed");

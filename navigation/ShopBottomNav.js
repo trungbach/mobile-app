@@ -1,25 +1,23 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import homeApi from "../components/api/homeApi";
-import { fetchListCartAction } from "../redux/actions/cartAction";
 import { homeAction } from "../redux/slice/homeSlice";
 import SplashScreen from "../screens/SplashScreen";
 import AccountNav from "./AccountNav";
 import CartNav from "./CartNav";
 import HomeNav from "./HomeNav";
 import SearchNav from "./SearchNav";
-import { useFocusEffect } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
 function BottomNav() {
-  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
+  const { user } = useSelector((state) => state.user);
   const { listCart } = useSelector((state) => state.cart);
+
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchTypes = async () => {
@@ -32,19 +30,11 @@ function BottomNav() {
       console.log(error);
     }
   };
+
   // goi api danh sach san pham man home.
   useEffect(() => {
     fetchTypes();
   }, []);
-
-  // // lay danh sach cart
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     dispatch(fetchListCartAction(user?._id));
-  //     console.log("fetchListCartAction");
-  //     return () => {};
-  //   }, [user])
-  // );
 
   return !isLoading ? (
     <Tab.Navigator

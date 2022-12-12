@@ -1,7 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
-
 import { useForm } from "react-hook-form";
 import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { ALERT_TYPE, Root, Toast } from "react-native-alert-notification";
@@ -13,11 +12,13 @@ import SelectForm from "../../commons/formHelper/SelectForm";
 import { registerAction } from "../../redux/actions/userActions";
 
 const ResgisterForm = ({ navigation }) => {
-  const [toggleVisibilityPassword, setToggleVisibilityPassword] = useState(false);
-  const [err, seterr] = useState();
-
   const dispatch = useDispatch();
-  const phoneRegExp = /^0[0-9]{9}/;
+
+  const [toggleVisibilityPassword, setToggleVisibilityPassword] = useState(false);
+  const [err, setErr] = useState();
+  const phoneRegExp = /^0[0-9]{9}/; // kiểm tra số điện thoại hợp lệ.
+
+  // kiểm tra giá trị hợp lệ các input register.
   const schema = yup
     .object({
       fullName: yup.string().required(),
@@ -33,11 +34,13 @@ const ResgisterForm = ({ navigation }) => {
     })
     .required();
 
+  // khi bấm submit thì gọi api register kèm body là dataSubmit.
+  //  thành công thì thông báo và chuyển sang màn login
   const onSubmit = async (data) => {
     const dataSubmit = { ...data };
     delete dataSubmit.confirmPassword;
     try {
-      await dispatch(registerAction(dataSubmit));
+      dispatch(registerAction(dataSubmit));
       Toast.show({
         type: ALERT_TYPE.SUCCESS,
         title: "SUCCESS",
@@ -49,7 +52,7 @@ const ResgisterForm = ({ navigation }) => {
         password: data.password,
       });
     } catch (error) {
-      seterr(error);
+      setErr(error);
     }
   };
 

@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import PopupNoti from "../base/PopupNoti";
 import ProductList from "../base/ProductList";
 
-export default function SearchModel({ visible, data, reloadScreen }) {
+export default function SearchModel({ visible, data }) {
   const navigation = useNavigation();
   // Nếu chưa gõ search
   if (!visible) return <Text></Text>;

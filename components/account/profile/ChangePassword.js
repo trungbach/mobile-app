@@ -7,7 +7,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUserAction } from "../../../redux/actions/userActions";
 import Header from "../../base/Header";
-import CustomInput from "../../login/CustomInput";
+import CustomInput from "../../auth/CustomInput";
 
 const ChangePassword = ({ navigation }) => {
   const user = useSelector((state) => state.user.user);

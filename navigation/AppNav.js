@@ -11,9 +11,10 @@ import LoginNav from "./LoginNav";
 import BottomNav from "./ShopBottomNav";
 
 const Nav = () => {
-  const { user } = useSelector((state) => state.user);
   const Stack = createStackNavigator();
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
   const [token, setToken] = useState(null);
 
   useEffect(() => {

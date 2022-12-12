@@ -1,14 +1,7 @@
-import {
-  StyleSheet,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Pressable,
-  Text,
-} from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Controller } from "react-hook-form";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 const CustomInput = ({
   index,
@@ -21,7 +14,6 @@ const CustomInput = ({
   iconName,
   isHaveVisibility,
   autoFocus,
-  defaultValue,
 }) => {
   const renderVisibility = () => (
     <Pressable
@@ -31,17 +23,9 @@ const CustomInput = ({
       style={styles.visibilityIcon}
     >
       {isVisibility ? (
-        <MaterialIcons
-          name="visibility"
-          color={isActive ? "#40BFFF" : "#EBF0FF"}
-          size={24}
-        />
+        <MaterialIcons name="visibility" color={isActive ? "#40BFFF" : "#EBF0FF"} size={24} />
       ) : (
-        <MaterialIcons
-          name="visibility-off"
-          color={isActive ? "#40BFFF" : "#EBF0FF"}
-          size={24}
-        />
+        <MaterialIcons name="visibility-off" color={isActive ? "#40BFFF" : "#EBF0FF"} size={24} />
       )}
     </Pressable>
   );
@@ -52,10 +36,7 @@ const CustomInput = ({
       rules={rule}
       control={control}
       name={name}
-      render={({
-        field: { value, onChange, onBlur },
-        fieldState: { error },
-      }) => (
+      render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
         <>
           <View
             style={[

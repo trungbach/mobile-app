@@ -9,6 +9,7 @@ import Field from "./Field";
 
 const Account = ({ navigation }) => {
   const dispatch = useDispatch();
+
   return (
     <View style={styles.wrapper}>
       <Header header="Account"></Header>

@@ -17,7 +17,7 @@ export const deleteShippingAction = createAsyncThunk(
   "deleteShipping",
   async (id, { rejectWithValue }) => {
     try {
-      const deletedShipping = await shippingInfoApi.deleteShippingInfo(id);
+      await shippingInfoApi.deleteShippingInfo(id);
       return id;
     } catch (error) {
       return rejectWithValue("Failed");
