@@ -6,6 +6,7 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import StarRating from "react-native-star-rating";
 import { useDispatch, useSelector } from "react-redux";
 import Notifycation from "../../../commons/Notifycation";
+import { Convert } from "../../../utils/Convert";
 import { productApi } from "../../api/productApi";
 import { addCartAction, updateCartAction } from "./../../../redux/actions/cartAction";
 import CarouselImage from "./Carousel";
@@ -166,7 +167,9 @@ const ProductDetail = ({ route }) => {
             )}
           </View>
           <View style={styles.price}>
-            <Text style={styles.priceText}>{`${route.params.item.price}`} VND</Text>
+            <Text style={styles.priceText}>
+              {`${Convert.formatMoney(route.params.item.price)}`} VND
+            </Text>
           </View>
 
           <SizeChoose sizes={currentProduct?.sizes} setSize={setSize} />

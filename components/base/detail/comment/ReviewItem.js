@@ -54,20 +54,6 @@ const ReviewItem = ({
     setMore(false);
   };
 
-  // const deleteById = () => {
-  //   const newReviews = reviews.filter((item) => item._id !== commentId);
-  //   setReviews(newReviews);
-  // };
-
-  // const handleChange = (id, data) => {
-  //   const arrayOfReviews = [...reviews];
-  //   arrayOfReviews.forEach((item, index) => {
-  //     if (item._id === id) {
-  //       arrayOfReviews[index] = data;
-  //     }
-  //   });
-  //   setReviews(arrayOfReviews);
-  // };
   return (
     <View style={styles.container}>
       <View style={styles.containerHeading}>
@@ -87,10 +73,7 @@ const ReviewItem = ({
           </View>
         </View>
       </View>
-      <Text style={styles.date}>{`${date.slice(0, 10)}  ${date.slice(
-        11,
-        19
-      )}`}</Text>
+      <Text style={styles.date}>{`${date.slice(0, 10)}  ${date.slice(11, 19)}`}</Text>
       <View style={styles.containerBody}>
         <View
           style={{
@@ -102,12 +85,7 @@ const ReviewItem = ({
           <Text style={styles.commentContainer}>{content}</Text>
           <View>
             <TouchableOpacity onPress={handleMore}>
-              <MaterialIcons
-                name="more-vert"
-                size={24}
-                style={{ marginTop: 2 }}
-                color="#9098B1"
-              />
+              <MaterialIcons name="more-vert" size={24} style={{ marginTop: 2 }} color="#9098B1" />
             </TouchableOpacity>
             <View style={styles.moreBox}>
               {more ? (
@@ -129,9 +107,9 @@ const ReviewItem = ({
                     </View>
                   ) : (
                     <View style={styles.moreContainer}>
-                      <TouchableOpacity onPress={handleReport}>
+                      {/* <TouchableOpacity onPress={handleReport}>
                         <Text style={styles.actionMore}>Report</Text>
-                      </TouchableOpacity>
+                      </TouchableOpacity> */}
                     </View>
                   )}
                 </>

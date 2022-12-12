@@ -7,7 +7,7 @@ import Gender from "../components/account/profile/Gender";
 import Name from "../components/account/profile/Name";
 import PhoneNumber from "../components/account/profile/PhoneNumber";
 import Profile from "../components/account/profile/Profile";
-import OrderDetail from "../components/base/detail/OrderDetail";
+import OrderDetail from "../components/account/order/OrderDetail";
 import Login from "../components/auth/LoginForm";
 import AccountScreen from "../screens/AccountScreen";
 import ShipToScreen from "../screens/ShipToScreen";

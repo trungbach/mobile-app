@@ -5,6 +5,8 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCartAction, updateCartAction } from "../../redux/actions/cartAction";
 import { cartAction } from "../../redux/slice/cartSlice";
+import { Convert } from "../../utils/Convert";
+
 function CartItem({ item }) {
   const { listPayment } = useSelector((state) => state.cart);
   const isSelected = listPayment.findIndex((paymentItem) => paymentItem === item?._id) >= 0;
@@ -56,7 +58,9 @@ function CartItem({ item }) {
               {item.size} {item?.color}
             </Text>
           </View>
-          <Text style={[styles.text, { color: "#40BFFF" }]}>{item?.product?.price} VND</Text>
+          <Text style={[styles.text, { color: "#40BFFF" }]}>
+            {Convert.formatMoney(item?.product?.price)} VND
+          </Text>
         </View>
       </View>
       <View style={styles.action}>

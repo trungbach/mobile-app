@@ -61,13 +61,6 @@ function Cart() {
             style={styles.buttonCheckOut}
             disabled={totalItems === 0}
           >
-            {/* <Image
-              source={require("../../static/images/ic_momo.png")}
-              style={{
-                width: 40,
-                height: 40,
-              }}
-            ></Image> */}
             <Text style={{ textAlign: "center", color: "white" }}>Check Out With Momo</Text>
           </TouchableOpacity>
         </View>

@@ -1,26 +1,11 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  StatusBar,
-} from "react-native";
-import React, { useState, useRef, useEffect } from "react";
-import { useIsFocused } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
 import { SortTextConstant } from "../../commons/constants/sort.constant";
-import { SortEnum } from "../../commons/enums/sort.enum";
 
-const Sort = ({ setSortBy, sortBy }) => {
+const Sort = ({ sortBy }) => {
   const navigation = useNavigation();
-  const isFocused = useIsFocused();
-
-  /**
-   * Xử lý focus input mỗi khi màn hình được focus
-   */
-  // useEffect(async () => {}, [isFocused]);
 
   return (
     <View style={styles.wrapper}>
@@ -40,15 +25,11 @@ const Sort = ({ setSortBy, sortBy }) => {
           {SortTextConstant.map((item, index) => (
             <TouchableOpacity
               onPress={() => {
-                // setSortBy(item.enum);
                 navigation.navigate("Search", {
                   sort_by: item.enum,
                 });
               }}
-              style={[
-                styles.optionSort,
-                item.enum == sortBy && styles.activeOptionSort,
-              ]}
+              style={[styles.optionSort, item.enum == sortBy && styles.activeOptionSort]}
               key={index}
             >
               <Text style={styles.textSort}>{item.name}</Text>

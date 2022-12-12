@@ -4,7 +4,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
 import orderApi from "../../api/orderApi";
 import Header from "../../base/Header";
-import OrderItem from "../../base/OrderItem";
+import OrderItem from "./OrderItem";
 
 const Order = () => {
   const [orders, setOrders] = useState([]);

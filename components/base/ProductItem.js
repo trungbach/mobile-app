@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import StarRating from "react-native-star-rating";
+import { Convert } from "../../utils/Convert";
 
 /**
  * Item trong list product
@@ -49,7 +50,9 @@ export default function ProductItem({ item }) {
             )}
           </View>
           <View>
-            <Text style={styles.itemPrice}>{`${Math.round((item.price * 10) / 10)} VND`}</Text>
+            <Text style={styles.itemPrice}>{`${Convert.formatMoney(
+              Math.round((item.price * 10) / 10)
+            )} VND`}</Text>
           </View>
           <View style={styles.saleBox}>
             <Text style={styles.itemOldPrice}>{`${

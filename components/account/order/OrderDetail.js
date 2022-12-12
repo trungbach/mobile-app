@@ -6,8 +6,8 @@ import { statusOrderEnum } from "../../../commons/enums/status-order.enum";
 import { Convert } from "../../../utils/Convert";
 import orderApi from "../../api/orderApi";
 import Header from "../../base/Header";
-import ProductItemV2 from "../../base/ProductItemV2";
-
+import { SHIPPING_FEE } from "../../../commons/constants/fee";
+import ProductItemV2 from "../../base/detail/ProductItemV2";
 const OrderDetail = ({ route }) => {
   const [order, setOrder] = useState([]);
   const isFocused = useIsFocused();
@@ -41,6 +41,7 @@ const OrderDetail = ({ route }) => {
     labelSize: 13,
     currentStepLabelColor: "#40BFFF",
   };
+
   /**
    * Xử lý focus input mỗi khi màn hình được focus
    */
@@ -53,7 +54,6 @@ const OrderDetail = ({ route }) => {
     setOrder(res);
   };
 
-  console.log(order?.order_products);
   return (
     <View style={styles.wrapper}>
       <Header header="Order Detail" haveBack={true}></Header>
@@ -83,10 +83,10 @@ const OrderDetail = ({ route }) => {
             <View style={styles.shippingDetail}>
               <View style={styles.field}>
                 <Text style={styles.label}>Date Shipping</Text>
-                <Text style={styles.text}>{Convert.formatDatetime(order.shippedDate)}</Text>
+                <Text style={styles.text}>{Convert.formatDatetimeOrder(order.shippedDate)}</Text>
               </View>
               <View style={styles.field}>
-                <Text style={styles.label}>No. Resi</Text>
+                <Text style={styles.label}>Order Id</Text>
                 <Text style={styles.text}>{order?._id?.substring(0, 16)}</Text>
               </View>
               <View style={styles.fieldBottom}>
@@ -100,15 +100,19 @@ const OrderDetail = ({ route }) => {
             <View style={styles.shippingDetail}>
               <View style={styles.field}>
                 <Text style={styles.label}>{`Items (${order?.quantity_items})`}</Text>
-                <Text style={styles.text}>{`$${order?.total_price}`}</Text>
+                <Text style={styles.text}>{`${Convert.formatMoney(
+                  order?.total_price - SHIPPING_FEE
+                )} VND`}</Text>
               </View>
               <View style={styles.field}>
                 <Text style={styles.label}>Shipping</Text>
-                <Text style={styles.text}>$20</Text>
+                <Text style={styles.text}>{Convert.formatMoney(SHIPPING_FEE)} VND</Text>
               </View>
               <View style={styles.fieldBottom}>
                 <Text style={styles.labelBold}>Total Price</Text>
-                <Text style={styles.textActive}>{`$${order?.total_price + 20}`}</Text>
+                <Text style={styles.textActive}>{`${Convert.formatMoney(
+                  order?.total_price
+                )} VND`}</Text>
               </View>
             </View>
           </View>

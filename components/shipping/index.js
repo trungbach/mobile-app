@@ -96,13 +96,14 @@ function Shipping({ navigation }) {
 
   // xu ly thanh toan
   const handlePayMomo = async () => {
+    const shippingFee = 20000;
     await getOrderIdInStore();
     const totalItems = listPayment.reduce((totalItems, item) => {
       return totalItems + listCart.find((cartItem) => cartItem?._id === item)?.quantity;
     }, 0);
     const totalPrice = listPayment.reduce((totalPrice, item) => {
       const currentItem = listCart.find((cartItem) => cartItem?._id === item);
-      return totalPrice + currentItem?.product?.price * currentItem?.quantity;
+      return totalPrice + currentItem?.product?.price * currentItem?.quantity + shippingFee;
     }, 0);
     const newOrder = {
       user_id: user?._id,

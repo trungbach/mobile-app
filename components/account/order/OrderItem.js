@@ -1,15 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Convert } from "../../utils/Convert";
-
-/**
- * Item trong list product
- * @param {*} param0
- * @returns
- */
+import { Convert } from "../../../utils/Convert";
 export default function OrderItem({ item }) {
   const navigation = useNavigation();
+  console.log("item", item);
   return (
     <TouchableOpacity
       onPress={() => {
@@ -18,8 +13,8 @@ export default function OrderItem({ item }) {
       style={styles.orderItem}
     >
       <Text style={styles.idOrder}>{item._id}</Text>
-      <Text style={[styles.label, { marginTop: 12 }]}>{`Order at : ${Convert.formatDatetime(
-        new Date()
+      <Text style={[styles.label, { marginTop: 12 }]}>{`Order at : ${Convert.formatDatetimeOrder(
+        new Date(item.updatedAt)
       )}`}</Text>
       <View style={styles.field}>
         <Text style={styles.label}>Shipping Status</Text>
@@ -31,11 +26,11 @@ export default function OrderItem({ item }) {
       </View>
       <View style={styles.field}>
         <Text style={styles.label}>Items</Text>
-        <Text style={styles.text}>{`${item.quantity_items} Items purchased`} </Text>
+        <Text style={styles.text}>{`${item.quantity_items}`} </Text>
       </View>
       <View style={styles.field}>
         <Text style={styles.label}>Price</Text>
-        <Text style={styles.price}>{`${item.total_price + 20} VND`}</Text>
+        <Text style={styles.price}>{`${Convert.formatMoney(item.total_price)} VND`}</Text>
       </View>
     </TouchableOpacity>
   );
