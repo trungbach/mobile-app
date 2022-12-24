@@ -4,11 +4,6 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import StarRating from "react-native-star-rating";
 import { Convert } from "../../utils/Convert";
 
-/**
- * Item trong list product
- * @param {*} param0
- * @returns
- */
 export default function ProductItem({ item }) {
   const navigation = useNavigation();
   return (

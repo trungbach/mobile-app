@@ -1,27 +1,9 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
-import React, { useState, useRef, useEffect } from "react";
-import { useIsFocused } from "@react-navigation/native";
+import React, { useRef } from "react";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { useNavigation } from "@react-navigation/native";
-// import { FilterTextConstant } from "../../commons/constants/Filter.constant";
-// import { FilterEnum } from "../../commons/enums/Filter.enum";
-
 const Filter = ({ setIsShowFilter, min, max, setMin, setMax }) => {
-  const navigation = useNavigation();
-  const isFocused = useIsFocused();
   const minInputRef = useRef(null);
   const maxInputRef = useRef(null);
-
-  /**
-   * Xử lý focus input mỗi khi màn hình được focus
-   */
-  // useEffect(async () => {}, [isFocused]);
 
   return (
     <View style={styles.wrapper}>

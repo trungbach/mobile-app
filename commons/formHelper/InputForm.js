@@ -16,7 +16,7 @@ function InputForm({
   defaultValue,
   autofocus = false,
 }) {
-  const [borderColor, setBorderColor] = useState("#EBF0FF");
+  const [borderColor, setBorderColor] = useState("#a5afcf");
 
   return (
     <View>
@@ -29,7 +29,7 @@ function InputForm({
               autofocus={autofocus}
               value={value}
               onFocus={() => setBorderColor("#40BFFF")}
-              onBlur={() => setBorderColor("#EBF0FF")}
+              onBlur={() => setBorderColor("#a5afcf")}
               style={styles.input}
               placeholder={placeholder}
               onChangeText={onChange}
